@@ -6,4 +6,4 @@ services:
     ports:
       - 4011:3000
     volumes:
-      - './env/.env.production.local:/app/.env'
+      - './env/:/app/env/'

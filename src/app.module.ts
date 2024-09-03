@@ -7,6 +7,7 @@ import { configs, validationSchema } from './config/index.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: './end/.env',
       load: configs,
       isGlobal: true,
       validationSchema: validationSchema,
