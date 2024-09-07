@@ -9,7 +9,7 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: './end/.env',
+      envFilePath: './env/.env',
       load: configs,
       isGlobal: true,
       validationSchema: validationSchema,
