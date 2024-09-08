@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-
-export type User = any;
+import { InjectRepository } from '@nestjs/typeorm';
+import { TypeOrmCrudService } from '@dataui/crud-typeorm';
+import { UserEntity } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class UsersService {
-  private readonly users = [
-    {
-      id: 1,
-      username: 'admin',
-      password: 'admin123',
-      role: 'admin',
-    },
-    {
-      id: 2,
-      username: 'user',
-      password: 'user123',
-      role: 'user',
-    },
-
-  ];
-
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+export class UsersService extends TypeOrmCrudService<UserEntity> {
+  constructor(
+    @InjectRepository(UserEntity) public userRepo: Repository<UserEntity>
+  ) {
+    super(userRepo);
   }
 }

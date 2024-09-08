@@ -1,14 +1,17 @@
 import Joi from "joi";
 import { baseConfig, baseConfigValidationSchema } from "./app.config";
+import { dbConfig, dbConfigValidationSchema } from "./db.config";
 import { jwtConfig, jwtConfigValidationSchema } from "./jwt.config";
 
 export const configs = [
   baseConfig,
+  dbConfig,
   jwtConfig,
 ];
 
 const schemas = [
   baseConfigValidationSchema,
+  dbConfigValidationSchema,
   jwtConfigValidationSchema,
 ];
 
