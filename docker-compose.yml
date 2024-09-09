@@ -7,3 +7,9 @@ services:
       - 4011:3000
     volumes:
       - './config/:/app/config/'
+    networks:
+      - mepro-net
+
+networks:
+  mepro-net:
+      driver: bridge
