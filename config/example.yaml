@@ -1,0 +1,16 @@
+app:
+  name: 'Me Pro'
+
+db:
+  host: 'localhost'
+  port: 5432
+  username: 'postgres'
+  password: 'postgres'
+  database: 'mepro-dev'
+  synchronize: true
+  logging:
+    - info
+    - error
+
+jwt:
+  secret: 'jwt-secret'
