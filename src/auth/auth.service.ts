@@ -11,20 +11,21 @@ export class AuthService {
     private jwtService: JwtService
   ) { }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string) {
     const user = await this.userRepo.findOne({
       where: { username: username }
     });
-    if (user.validatePassword(password)) {
+    if (user && user.validatePassword(password)) {
       return user;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async signIn(user: UserEntity) {
+    const payload = { username: user.username, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
+      user: user,
     };
   }
 }
