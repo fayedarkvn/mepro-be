@@ -19,7 +19,7 @@ jobs:
 
     # Save Docker image as a tar file to send to EC2
     - name: Save Docker image
-      run: docker save mepro-be -o mepro-be.tar
+      run: docker save mepro-be -o /tmp/mepro-be.tar
 
     # Transfer Docker image directly to the EC2 instance using SCP
     - name: Transfer Docker image to EC2
@@ -29,7 +29,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.RSA_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: mepro-be.tar
+        source: /tmp/mepro-be.tar
         target: ${{ secrets.PATH_FOLDER }}/build/mepro-be.tar
 
     # SSH into EC2, load the Docker image, and run the container
