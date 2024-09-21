@@ -21,6 +21,7 @@ jobs:
     - name: Save Docker image
       run: |
         docker save mepro-be -o /tmp/mepro-be.tar
+        chmod 644 /tmp/mepro-be.tar
         cp /tmp/mepro-be.tar mepro-be.tar
 
     # Transfer Docker image directly to the EC2 instance using SCP
