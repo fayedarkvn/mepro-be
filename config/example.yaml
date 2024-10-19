@@ -1,5 +1,6 @@
 app:
   name: 'Me Pro'
+  port: 4011
 
 db:
   host: 'localhost'
