@@ -41,7 +41,7 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    const [entityClass, property] = args.constraints;
+    const [, property] = args.constraints;
     return `${property} must be unique.`;
   }
 }
