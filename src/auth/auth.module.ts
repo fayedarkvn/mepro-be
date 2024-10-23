@@ -1,15 +1,16 @@
 
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategys/local.strategy';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthController } from './auth.controller';
-import { JwtStrategy } from './strategys/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccountEntity } from 'src/entities/account.entity';
 import { UserEntity } from 'src/entities/user.entity';
+import { UsersModule } from '../users/users.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategys/jwt.strategy';
+import { LocalStrategy } from './strategys/local.strategy';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { UserEntity } from 'src/entities/user.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, AccountEntity]),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
