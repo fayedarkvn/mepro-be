@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { join } from "path";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies/snake-naming.strategy";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { join } from "path";
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],
         logging: configService.get('db.logging'),
         autoLoadEntities: true,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
       inject: [ConfigService],
     })
