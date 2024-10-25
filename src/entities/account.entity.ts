@@ -40,6 +40,6 @@ export class AccountEntity extends BaseEntity {
   @Column({ nullable: true })
   sessionState: string;
 
-  @ManyToOne(() => UserEntity, user => user.id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-  user: number;
+  @ManyToOne(() => UserEntity, user => user.accounts, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  user: UserEntity;
 }

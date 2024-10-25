@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import { IsString } from "class-validator";
 import { UserDto } from "src/users/dto/user.dto";
 
 export class SignInDto {
   @ApiProperty()
   @IsString()
+  @Transform(({ value }) => value.trim().toLowerCase())
   username: string;
 
   @ApiProperty()
@@ -20,4 +21,4 @@ export class SignInSuccessResponseDto {
   @ApiProperty()
   @Type(() => UserDto)
   user: UserDto;
-};
+}
