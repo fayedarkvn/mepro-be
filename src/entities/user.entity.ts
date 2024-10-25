@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { AccountEntity } from './account.entity';
 
 export enum UserRoleEnum {
@@ -9,14 +9,10 @@ export enum UserRoleEnum {
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({})
+  @Column({ nullable: true })
   name: string;
 
   @Column()
-  @Index({ unique: true })
   email: string;
 
   @Column({ default: UserRoleEnum.USER, enum: UserRoleEnum })
