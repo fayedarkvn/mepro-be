@@ -26,7 +26,10 @@ export class AccountEntity extends BaseEntity {
   accessToken: string;
 
   @Column({ nullable: true })
-  expiresAt: number;
+  expiresIn: number;
+
+  @Column({ nullable: true })
+  expiresAt: Date;
 
   @Column({ nullable: true })
   tokenType: string;

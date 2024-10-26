@@ -22,7 +22,7 @@ export class AuthController {
   ) { }
 
   @ApiOkResponse({ type: SignInSuccessResponseDto })
-  @ApiHttpException(() => [UnauthorizedException])
+  @ApiHttpException(() => [BadRequestException, UnauthorizedException])
   @Post('sign-in')
   @HttpCode(200)
   async signIn(@Body() dto: SignInDto) {
@@ -37,7 +37,10 @@ export class AuthController {
     return this.authService.signUp(dto);
   }
 
+  @ApiOkResponse({ type: SignInSuccessResponseDto })
+  @ApiHttpException(() => [BadRequestException, UnauthorizedException])
   @Post('google')
+  @HttpCode(200)
   googleSignIn(@Body() dto: GoogleOAuthDto) {
     return this.authService.googleSignIn(dto);
   }

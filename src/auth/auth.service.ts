@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync, hashSync } from 'bcrypt';
@@ -44,16 +44,10 @@ export class AuthService {
       },
     });
 
-    console.log(account);
-
-    if (!account) {
-      throw new BadRequestException('User not found');
-    }
-
-    const isPasswordMatch = compareSync(dto.password, account.accessToken);
+    const isPasswordMatch = account && compareSync(dto.password, account.accessToken);
 
     if (!isPasswordMatch) {
-      throw new BadRequestException('Password is not correct');
+      throw new UnauthorizedException('Username or password is not correct');
     }
 
     return this.authenticateUser(account.user);
@@ -88,31 +82,33 @@ export class AuthService {
   }
 
   async googleSignIn(dto: GoogleOAuthDto) {
-    const { tokens } = await this.googleOAuthService.getToken(dto.code);
+    const { tokens } = await this.googleOAuthService.getToken(dto.code).catch(() => {
+      throw new UnauthorizedException("Invalid code");
+    });
 
-    const isTokenValid = await this.googleOAuthService.verifyIdToken({ idToken: tokens.id_token });
+    const ticket = await this.googleOAuthService.verifyIdToken({ idToken: tokens.id_token }).catch(() => {
+      throw new UnauthorizedException();
+    });
 
-    if (!isTokenValid) {
-      throw new BadRequestException('Invalid token');
-    }
-
-    const googleUser = await this.googleOAuthService.getTokenInfo(tokens.access_token);
+    const payload = ticket.getPayload();
 
     let user = await this.userRepo.findOne({
       where: {
-        email: googleUser.email,
+        email: payload.email,
       },
     });
+
     let account = await this.accountRepo.findOne({
       where: {
-        providerAccountId: googleUser.sub,
+        providerAccountId: payload.sub,
         provider: AccountProviderEnum.GOOGLE,
       },
     });
 
     if (!user) {
       const newUser = this.userRepo.create({
-        email: googleUser.email,
+        email: payload.email,
+        name: ticket.getPayload().name,
       });
 
       user = await this.userRepo.save(newUser);
@@ -122,9 +118,10 @@ export class AuthService {
       const newAccount = this.accountRepo.create({
         user: user,
         provider: AccountProviderEnum.GOOGLE,
-        providerAccountId: googleUser.sub,
+        providerAccountId: payload.sub,
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
+        expiresAt: new Date(tokens.expiry_date),
       });
 
       account = await this.accountRepo.save(newAccount);
@@ -132,6 +129,7 @@ export class AuthService {
     else {
       account.accessToken = tokens.access_token;
       account.refreshToken = tokens.refresh_token;
+      account.expiresAt = new Date(tokens.expiry_date);
       await this.accountRepo.save(account);
     }
 
