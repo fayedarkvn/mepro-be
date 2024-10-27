@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { UserDto } from './dto/user.dto';
 
 @Controller('users')
 @ApiTags('Users')
@@ -14,7 +15,7 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 @UseGuards(JwtAuthGuard, AdminGuard)
 @Crud({
   model: {
-    type: UserEntity,
+    type: UserDto,
   },
   dto: {
     create: CreateUserDto,
