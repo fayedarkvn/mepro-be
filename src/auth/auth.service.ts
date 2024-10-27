@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync, hashSync } from 'bcrypt';
@@ -7,11 +8,12 @@ import { AccountEntity, AccountProviderEnum } from 'src/entities/account.entity'
 import { UserEntity } from 'src/entities/user.entity';
 import { GoogleOauthService } from 'src/google-oauth/google-oauth.service';
 import { Repository } from 'typeorm';
+import { IAuthenticatedUser } from './decorators/get-user.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
+import { UserJwtPayloadDto } from './dtos/jwt-payload.dto';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
-import { IJwtPayload } from './strategys/jwt.strategy';
 
 @Injectable()
 export class AuthService {
@@ -20,16 +22,24 @@ export class AuthService {
     @InjectRepository(AccountEntity) private accountRepo: Repository<AccountEntity>,
     private jwtService: JwtService,
     private googleOAuthService: GoogleOauthService,
+    private configService: ConfigService,
   ) { }
 
   async authenticateUser(user: UserEntity) {
-    const payload: IJwtPayload = {
-      sub: user.id
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const payload: UserJwtPayloadDto = {
+      service: "auth",
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      iat: currentTimestamp,
+      exp: currentTimestamp + this.configService.get('jwt.expiresIn', 1440) * 60,
     };
+    const accessToken = this.jwtService.sign(payload);
 
     return {
-      accessToken: this.jwtService.sign(payload),
-      user: user,
+      accessToken,
+      user,
     };
   }
 
@@ -108,8 +118,7 @@ export class AuthService {
     if (!user) {
       const newUser = this.userRepo.create({
         email: payload.email,
-        name: payload.name,
-        image: payload.picture,
+        name: ticket.getPayload().name,
       });
 
       user = await this.userRepo.save(newUser);
@@ -137,7 +146,11 @@ export class AuthService {
     return this.authenticateUser(user);
   }
 
-  async getPassword(user: UserEntity) {
+  async getPassword(authenticatedUser: IAuthenticatedUser) {
+    const user = await this.userRepo.findOne({
+      where: { id: authenticatedUser.id }
+    });
+
     const account = await this.accountRepo.findOne({
       where: {
         provider: AccountProviderEnum.LOCAL,
@@ -156,7 +169,11 @@ export class AuthService {
     };
   }
 
-  async chagePassword(dto: ChangePasswordDto, user: UserEntity) {
+  async chagePassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
+    const user = await this.userRepo.findOne({
+      where: { id: authenticatedUser.id }
+    });
+
     const account = await this.accountRepo.findOne({
       where: {
         provider: AccountProviderEnum.LOCAL,
