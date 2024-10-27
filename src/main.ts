@@ -3,11 +3,13 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
+import { Logger } from '@nestjs/common';
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
 
   // Enable CORS
   app.enableCors();
@@ -31,7 +33,7 @@ async function bootstrap() {
 
   // Start the app
   await app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    logger.log(`Server is running on http://localhost:${port}`);
   });
 
   // Hot Module Replacement
