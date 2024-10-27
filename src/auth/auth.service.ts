@@ -108,7 +108,8 @@ export class AuthService {
     if (!user) {
       const newUser = this.userRepo.create({
         email: payload.email,
-        name: ticket.getPayload().name,
+        name: payload.name,
+        image: payload.picture,
       });
 
       user = await this.userRepo.save(newUser);
