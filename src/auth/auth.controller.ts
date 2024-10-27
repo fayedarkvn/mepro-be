@@ -65,7 +65,7 @@ export class AuthController {
   @ApiHttpException(() => [UnauthorizedException])
   @Get('me')
   @UseGuards(AuthGuard)
-  getProfile(@GetUser() authenticatedUser: IAuthenticatedUser) {
-    return authenticatedUser;
+  async getProfile(@GetUser() authenticatedUser: IAuthenticatedUser) {
+    return this.authService.getProfile(authenticatedUser);
   }
 }

@@ -197,4 +197,12 @@ export class AuthService {
 
     return true;
   }
+
+  async getProfile(authenticatedUser: IAuthenticatedUser) {
+    const user = await this.userRepo.findOne({
+      where: { id: authenticatedUser.id }
+    });
+    
+    return user;
+  }
 }
