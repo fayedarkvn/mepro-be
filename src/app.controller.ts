@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AppService } from './app.service';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { AdminGuard } from './common/guards/admin.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AppService } from './app.service';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { AdminGuard } from './common/guards/admin.guard';
 
 @ApiTags('Hello World')
 @Controller()
@@ -18,14 +18,14 @@ export class AppController {
 
   @Get('hello-user')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   getHelloUser(): string {
     return this.appService.getHelloUser();
   }
 
   @Get('hello-admin')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   getHelloAdmin(): string {
     return this.appService.getHelloAdmin();
   }
