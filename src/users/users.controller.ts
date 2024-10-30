@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
+import { AdminGuard } from "src/auth/guards/admin.guard";
 
 @Controller('users')
 @ApiTags('Users')

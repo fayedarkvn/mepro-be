@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { AdminGuard } from './common/guards/admin.guard';
+import { AdminGuard } from './auth/guards/admin.guard';
 
 @ApiTags('Hello World')
 @Controller()
