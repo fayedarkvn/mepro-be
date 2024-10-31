@@ -16,7 +16,7 @@ export class UserEntity extends BaseEntity {
   email: string;
 
   @Column({ nullable: true })
-  image: string;
+  imageKey: string;
 
   @Column({ default: UserRoleEnum.USER, enum: UserRoleEnum })
   role: string;

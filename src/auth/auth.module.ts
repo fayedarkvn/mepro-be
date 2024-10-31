@@ -9,12 +9,15 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { ImgAuthGuard } from './guards/img-auth.guard';
+import { ImageEntity } from 'src/entities/image.entity';
+import { ImagesModule } from 'src/images/images.module';
 
 @Module({
   imports: [
     UsersModule,
-    TypeOrmModule.forFeature([UserEntity, AccountEntity]),
+    TypeOrmModule.forFeature([UserEntity, AccountEntity, ImageEntity]),
     GoogleOauthModule,
+    ImagesModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard, ImgAuthGuard],
