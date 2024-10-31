@@ -22,10 +22,14 @@ async function bootstrap() {
     .setTitle('Me Pro API')
     .setDescription('The API description')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   // Get the port from the config
   const configService = app.get<ConfigService>(ConfigService);
