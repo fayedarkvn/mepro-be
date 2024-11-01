@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GlobalConfigModule } from './config/global-config.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { HealthModule } from './health/health.module';
 import { HttpLoggerMiddleware } from './common/logger/http-logger.middleware';
+import { GlobalConfigModule } from './config/global-config.module';
+import { HealthModule } from './health/health.module';
+import { ImagesModule } from './images/images.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { HttpLoggerMiddleware } from './common/logger/http-logger.middleware';
     AuthModule,
     UsersModule,
     HealthModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

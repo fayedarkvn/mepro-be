@@ -1,36 +1,26 @@
-import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum ImageUacEnum {
   PUBLIC = 'public',
   USER_PRIVATE = 'user-private',
 }
 
-export enum ImageProviderEnum {
-  S3 = 's3',
-  LOCAL = 'local',
-  OTHER = 'other',
-}
-
 @Entity('images')
-export class ImageEntity extends BaseEntity {
-  @Column()
-  imageId: string;
+export class ImageEntity {
+  @PrimaryGeneratedColumn({ type: "bigint" })
+  id: string;
 
-  @Column({ enum: ImageProviderEnum })
+  @Column({ nullable: true })
+  key: string;
+
+  @Column({ nullable: true })
   provider: string;
 
   @Column({ default: false })
   providerPublicAccess: boolean;
 
   @Column({ nullable: true })
-  providerImageId: string;
-
-  @Column({ nullable: true })
-  providerPriority: number;
-
-  @Column({ enum: ImageUacEnum })
-  uac: string;
+  providerImageKey: string;
 
   @Column({ nullable: true })
   url: string;

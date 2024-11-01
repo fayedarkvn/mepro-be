@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseEntityDto } from 'src/common/dtos/base-entity.dto';
-import { UserEntity, UserRoleEnum } from '../../entities/user.entity';
+import { UserRoleEnum } from '../../entities/user.entity';
 
-export class UserDto extends BaseEntityDto implements Pick<UserEntity, 'name' | 'email' | 'image' | 'role'> {
+export class UserDto extends BaseEntityDto {
   @ApiProperty({ nullable: true })
   name: string;
 
@@ -10,7 +10,10 @@ export class UserDto extends BaseEntityDto implements Pick<UserEntity, 'name' | 
   email: string;
 
   @ApiProperty({ nullable: true })
-  image: string | null;
+  image: string;
+
+  @ApiPropertyOptional({ nullable: true })
+  imageUrl: string;
 
   @ApiProperty({ enum: UserRoleEnum })
   role: UserRoleEnum;
