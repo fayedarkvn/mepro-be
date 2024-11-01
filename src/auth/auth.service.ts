@@ -16,6 +16,7 @@ import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { ImageEntity } from 'src/entities/image.entity';
 import { ImagesService } from 'src/images/images.service';
+import { DEFAULT_IMAGE_KEY } from 'src/common/constrains/image';
 
 @Injectable()
 export class AuthService {
@@ -83,6 +84,7 @@ export class AuthService {
     const user = this.userRepo.create({
       email: dto.email,
       name: dto.name,
+      image: DEFAULT_IMAGE_KEY.USER_AVATAR,
     });
 
     await this.userRepo.save(user);
