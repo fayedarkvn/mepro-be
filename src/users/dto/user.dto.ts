@@ -10,7 +10,7 @@ export class UserDto extends BaseEntityDto {
   email: string;
 
   @ApiProperty({ nullable: true })
-  imageKey: string;
+  image: string;
 
   @ApiPropertyOptional({ nullable: true })
   imageUrl: string;

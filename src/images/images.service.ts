@@ -152,7 +152,7 @@ export class ImagesService {
   private getImageKeysInObject(data: { [key: string]: any; }) {
     const imageKeys: { [key: string]: string; } = {};
     for (const [key, value] of Object.entries(data)) {
-      if (/^.*[Ii]mageKey$/.test(key) && value) {
+      if (/^.*[Ii]mage$/.test(key) && value) {
         imageKeys[key] = value;
       }
     }
@@ -162,12 +162,12 @@ export class ImagesService {
   private mapImageToObejct(keys: string[], images: ImageEntity[], imageKeys: IImageKeys): IReslovedUrls {
     return keys.reduce((acc, key) => {
       const image = images.find(image => image.key === imageKeys[key]);
-      if (key == "imageKey") {
+      if (key == "image") {
         acc["imageUrl"] = image?.url || null;
         acc["imageProvider"] = image?.provider || null;
         return acc;
       } else {
-        const propertyName = key.replace(/ImageKey$/, '');
+        const propertyName = key.replace(/Image$/, '');
         acc[propertyName + "ImageUrl"] = image?.url || null;
         acc[propertyName + "ImageProvider"] = image?.provider || null;
         return acc;
