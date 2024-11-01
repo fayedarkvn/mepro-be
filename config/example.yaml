@@ -13,5 +13,27 @@ db:
     - info
     - error
 
+oauth:
+  google:
+    clientID: 'app-id.apps.googleusercontent.com'
+    clientSecret: 'app-client-secret'
+
 jwt:
   secret: 'jwt-secret'
+  expiresIn: 2880
+
+image:
+  fallbackImageProviders:
+    - s3
+
+s3:
+  region: 'us-east-1'
+  bucketName: 'bucket-name'
+  accessKeyId: 'access-key-id'
+  secretAccessKey: 'secret-access-key'
+
+imagekit:
+  urlEndpoint: "imagekit-url-endpoint"
+  publicKey: "public_key"
+  privateKey: "private_key"
+  

@@ -23,7 +23,7 @@ export class ImagesService {
     private imagekitService: ImagekitService,
     configService: ConfigService,
   ) {
-    const enabledProviders = configService.get<string[]>('image.enabledProviders') || [];
+    const enabledProviders = [IMAGE_PROVIDER.DEFAULT as string].concat(configService.get<string[]>('image.fallbackImageProviders'));
     this.enabledProviders = enabledProviders;
 
     const providerPriority = enabledProviders.reduce((acc, provider, index) => {
