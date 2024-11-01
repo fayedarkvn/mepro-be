@@ -41,8 +41,6 @@ export class AuthService {
     };
     const accessToken = this.jwtService.sign(payload);
 
-    await this.imageService.updateImageForObject(user);
-
     return {
       accessToken,
       user,
@@ -66,7 +64,11 @@ export class AuthService {
       throw new UnauthorizedException('Username or password is not correct');
     }
 
-    return this.authenticateUser(account.user);
+    const user = account.user;
+
+    await this.imageService.updateImageForObject(user);
+
+    return this.authenticateUser(user);
   }
 
   async signUp(dto: SignUpDto) {
@@ -93,6 +95,8 @@ export class AuthService {
     });
 
     await this.accountRepo.save(account);
+
+    await this.imageService.updateImageForObject(user);
 
     return this.authenticateUser(user);
   }
@@ -132,7 +136,7 @@ export class AuthService {
       const newUser = this.userRepo.create({
         email: payload.email,
         name: ticket.getPayload().name,
-        imageKey: image.key,
+        image: image.key,
       });
 
       user = await this.userRepo.save(newUser);
@@ -156,6 +160,8 @@ export class AuthService {
       account.expiresAt = new Date(tokens.expiry_date);
       await this.accountRepo.save(account);
     }
+
+    await this.imageService.updateImageForObject(user);
 
     return this.authenticateUser(user);
   }
