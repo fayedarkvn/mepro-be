@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AccountEntity } from './account.entity';
+import { PhotoEntity } from './photo.entity';
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
@@ -23,4 +24,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => AccountEntity, account => account.user)
   accounts: AccountEntity[];
+
+  @OneToMany(() => PhotoEntity, photo => photo.user)
+  photos: PhotoEntity[];
 }
