@@ -7,6 +7,7 @@ import { ImageEntity } from 'src/entities/image.entity';
 import { ImagekitService } from 'src/imagekit/imagekit.service';
 import { S3Service } from 'src/s3/s3.service';
 import { In, Repository } from 'typeorm';
+import { createHash } from 'crypto';
 
 export type IImageKeys = { [key: string]: string; };
 export type IImageKeysArray = IImageKeys[];
@@ -34,6 +35,33 @@ export class ImagesService {
 
     const logger = new Logger('ImagesService');
     logger.log(`Enabled image providers: ${enabledProviders}`);
+  }
+
+  async uploadImage(file: Express.Multer.File) {
+    const fileHash = createHash('md5').update(file.buffer).digest('base64url');
+
+    const existingImage = await this.imageRepo.findOne({
+      where: { key: fileHash }
+    });
+
+    if (existingImage) {
+      return existingImage;
+    }
+
+    const uploadResponse = await this.imagekitService.client.upload({
+      file: file.buffer,
+      fileName: fileHash,
+      folder: "default",
+    });
+
+    const image = this.imageRepo.create({
+      key: fileHash,
+      providerImageKey: uploadResponse.filePath,
+      provider: IMAGE_PROVIDER.IMAGEKIT,
+    });
+
+    await this.imageRepo.save(image);
+    return image;
   }
 
   async updateImageForObject(data: { [key: string]: any; }) {

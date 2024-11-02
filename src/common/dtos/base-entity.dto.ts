@@ -10,3 +10,14 @@ export class BaseEntityDto {
   @ApiProperty()
   updatedAt: Date;
 }
+
+export class BaseEntityWithBigintIdDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
+}

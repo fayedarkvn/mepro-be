@@ -7,6 +7,7 @@ import { GlobalConfigModule } from './config/global-config.module';
 import { HealthModule } from './health/health.module';
 import { ImagesModule } from './images/images.module';
 import { UsersModule } from './users/users.module';
+import { PhotosModule } from './photos/photos.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     HealthModule,
     ImagesModule,
+    PhotosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
