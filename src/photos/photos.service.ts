@@ -27,8 +27,6 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
 
     const image = await this.imageService.uploadImage(file);
 
-    console.log(file);
-
     const photo = this.photoRepo.create({
       title: dto.title ?? file.originalname,
       labels: dto.labels,
