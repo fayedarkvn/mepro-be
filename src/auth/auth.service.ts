@@ -3,20 +3,20 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync, hashSync } from 'bcrypt';
-import { SALT_ROUND } from 'src/common/constrains/crypto';
-import { AccountEntity, AccountProviderEnum } from 'src/entities/account.entity';
-import { UserEntity } from 'src/entities/user.entity';
-import { GoogleOauthService } from 'src/google-oauth/google-oauth.service';
 import { Repository } from 'typeorm';
+import { SALT_ROUND } from '../common/constrains/crypto';
+import { DEFAULT_IMAGE_KEY } from '../common/constrains/image';
+import { AccountEntity, AccountProviderEnum } from '../entities/account.entity';
+import { ImageEntity } from '../entities/image.entity';
+import { UserEntity } from '../entities/user.entity';
+import { GoogleOauthService } from '../google-oauth/google-oauth.service';
+import { ImagesService } from '../images/images.service';
 import { IAuthenticatedUser } from './decorators/get-user.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
 import { UserJwtPayloadDto } from './dtos/jwt-payload.dto';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
-import { ImageEntity } from 'src/entities/image.entity';
-import { ImagesService } from 'src/images/images.service';
-import { DEFAULT_IMAGE_KEY } from 'src/common/constrains/image';
 
 @Injectable()
 export class AuthService {

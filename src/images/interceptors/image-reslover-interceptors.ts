@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { map } from 'rxjs/operators';
-import { ImagesService } from 'src/images/images.service';
+import { ImagesService } from '../../images/images.service';
 
 @Injectable()
 export class ImageResloverInterceptor<T> implements NestInterceptor<T> {

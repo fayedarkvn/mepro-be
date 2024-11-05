@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
-import { IsEmail, IsString } from "class-validator";
-import { UserDto } from "src/users/dto/user.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
+import { IsEmail, IsString } from 'class-validator';
+import { UserDto } from '../../users/dto/user.dto';
 
 export class SignUpDto {
   @ApiProperty()

@@ -2,13 +2,13 @@ import { CrudRequest } from '@dataui/crud';
 import { TypeOrmCrudService } from '@dataui/crud-typeorm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IAuthenticatedUser } from 'src/auth/decorators/get-user.decorator';
-import { PhotoEntity } from 'src/entities/photo.entity';
-import { ImagesService } from 'src/images/images.service';
+import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
+import { IAuthenticatedUser } from '../auth/decorators/get-user.decorator';
+import { PhotoEntity } from '../entities/photo.entity';
+import { ImagesService } from '../images/images.service';
 import { PhotoDto } from './dtos/photo.dto';
 import { UploadPhotoDto } from './dtos/upload-photo.dto';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class PhotosService extends TypeOrmCrudService<PhotoEntity> {

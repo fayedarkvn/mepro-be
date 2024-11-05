@@ -1,5 +1,5 @@
 import { Equals, IsEmail, IsIn, IsInt, IsNumber, Validate } from 'class-validator';
-import { UserRoleEnum } from 'src/entities/user.entity';
+import { UserRoleEnum } from '../../entities/user.entity';
 
 export class JwtPayloadDto {
   @IsNumber()

@@ -1,5 +1,5 @@
-import { BaseEntityWithBigintId } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
+import { BaseEntityWithBigintId } from '../common/entities/base.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('photos')

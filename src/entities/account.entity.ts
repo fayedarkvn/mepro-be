@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
-
-import { BaseEntity } from "src/common/entities/base.entity";
+import { BaseEntity } from '../common/entities/base.entity';
 import { UserEntity } from "./user.entity";
 
 export enum AccountProviderEnum {

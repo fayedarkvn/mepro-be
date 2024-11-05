@@ -2,11 +2,11 @@ import { Crud, CrudController, CrudRequest, Override, ParsedRequest } from '@dat
 import { Body, Controller, Param, Post, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser, IAuthenticatedUser } from 'src/auth/decorators/get-user.decorator';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { parseImagePipe } from 'src/common/pipes/parse-image.pipe';
-import { PhotoEntity } from 'src/entities/photo.entity';
-import { ImageResloverInterceptor } from 'src/images/interceptors/image-reslover-interceptors';
+import { GetUser, IAuthenticatedUser } from '../auth/decorators/get-user.decorator';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { parseImagePipe } from '../common/pipes/parse-image.pipe';
+import { PhotoEntity } from '../entities/photo.entity';
+import { ImageResloverInterceptor } from '../images/interceptors/image-reslover-interceptors';
 import { PhotoDto } from './dtos/photo.dto';
 import { UpdatePhotoDto } from './dtos/update-photo.dto';
 import { UploadPhotoDto } from './dtos/upload-photo.dto';

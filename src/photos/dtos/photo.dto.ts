@@ -1,6 +1,6 @@
-import { ApiProperty } from "@dataui/crud/lib/crud";
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { BaseEntityWithBigintIdDto } from "src/common/dtos/base-entity.dto";
+import { ApiProperty } from '@dataui/crud/lib/crud';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { BaseEntityWithBigintIdDto } from '../../common/dtos/base-entity.dto';
 
 export class PhotoDto extends BaseEntityWithBigintIdDto {
   @ApiProperty({ nullable: true })

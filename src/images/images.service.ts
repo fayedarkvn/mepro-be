@@ -1,13 +1,13 @@
 import { flatten, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { partition } from 'lodash';
-import { IMAGE_PROVIDER } from 'src/common/constrains/image';
-import { ImageEntity } from 'src/entities/image.entity';
-import { ImagekitService } from 'src/imagekit/imagekit.service';
-import { S3Service } from 'src/s3/s3.service';
-import { In, Repository } from 'typeorm';
 import { createHash } from 'crypto';
+import { partition } from 'lodash';
+import { In, Repository } from 'typeorm';
+import { IMAGE_PROVIDER } from '../common/constrains/image';
+import { ImageEntity } from '../entities/image.entity';
+import { ImagekitService } from '../imagekit/imagekit.service';
+import { S3Service } from '../s3/s3.service';
 
 export type IImageKeys = { [key: string]: string; };
 export type IImageKeysArray = IImageKeys[];

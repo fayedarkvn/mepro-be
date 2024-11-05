@@ -1,5 +1,5 @@
-import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
+import { BaseEntity } from '../common/entities/base.entity';
 import { AccountEntity } from './account.entity';
 import { PhotoEntity } from './photo.entity';
 

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { IsUniqueConstraint } from '../common/validators/is-unique.validator';
 import { UserEntity } from '../entities/user.entity';
+import { ImagesModule } from '../images/images.module';
 import { UsersController } from './users.controller';
-import { IsUniqueConstraint } from 'src/common/validators/is-unique.validator';
-import { ImagesModule } from 'src/images/images.module';
+import { UsersService } from './users.service';
 
 @Module({
   imports: [

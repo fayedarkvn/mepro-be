@@ -1,7 +1,7 @@
 import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, HttpCode, Post, UnauthorizedException, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiHttpException } from 'src/common/decorators/api-http-exception.decorator';
-import { UserDto } from 'src/users/dto/user.dto';
+import { ApiHttpException } from '../common/decorators/api-http-exception.decorator';
+import { UserDto } from '../users/dto/user.dto';
 import { AuthService } from './auth.service';
 import { GetUser, IAuthenticatedUser } from './decorators/get-user.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';

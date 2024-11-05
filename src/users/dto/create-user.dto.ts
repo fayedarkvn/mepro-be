@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString } from "class-validator";
-import { IsUnique } from "src/common/validators/is-unique.validator";
-import { UserEntity, UserRoleEnum } from "src/entities/user.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsString } from 'class-validator';
+import { IsUnique } from '../../common/validators/is-unique.validator';
+import { UserEntity, UserRoleEnum } from '../../entities/user.entity';
 
 export class CreateUserDto {
   @ApiProperty({})
