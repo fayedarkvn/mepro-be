@@ -36,4 +36,11 @@ imagekit:
   urlEndpoint: "imagekit-url-endpoint"
   publicKey: "public_key"
   privateKey: "private_key"
-  
+
+mailer:
+  host: smtp.office365.com
+  port: 587
+  secure: false
+  user: mepro@fayedark.com
+  pass: secret
+  from: mepro@fayedark.com
