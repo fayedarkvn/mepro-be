@@ -7,7 +7,7 @@ export enum AccountProviderEnum {
   LOCAL = 'local',
 }
 
-@Entity('accounts')
+@Entity('account')
 export class AccountEntity extends BaseEntity {
   @Column({ enum: AccountProviderEnum })
   provider: string;

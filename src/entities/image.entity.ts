@@ -5,7 +5,7 @@ export enum ImageUacEnum {
   USER_PRIVATE = 'user-private',
 }
 
-@Entity('images')
+@Entity('image')
 export class ImageEntity {
   @PrimaryGeneratedColumn({ type: "bigint" })
   id: string;

@@ -6,7 +6,7 @@ export enum UserRoleEnum {
   USER = 'user',
 }
 
-@Entity('users')
+@Entity('user')
 export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   name: string;

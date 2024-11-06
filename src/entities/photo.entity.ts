@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntityWithBigintId } from '../common/entities/base.entity';
 import { UserEntity } from './user.entity';
 
-@Entity('photos')
+@Entity('photo')
 export class PhotoEntity extends BaseEntityWithBigintId {
   @Column({ nullable: true })
   title: string;

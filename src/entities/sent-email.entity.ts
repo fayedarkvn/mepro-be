@@ -3,7 +3,7 @@ import { Column, Entity } from 'typeorm';
 import { JsonColumn } from '../common/decorators/json-column.decorator';
 import { BaseEntityWithBigintId } from '../common/entities/base.entity';
 
-@Entity('sent_emails')
+@Entity('sent_email')
 export class SentEmailEntity extends BaseEntityWithBigintId {
   @Column({ nullable: true })
   messageId: string;
