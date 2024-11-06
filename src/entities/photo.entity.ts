@@ -4,13 +4,13 @@ import { UserEntity } from './user.entity';
 
 @Entity('photos')
 export class PhotoEntity extends BaseEntityWithBigintId {
-  @Column({nullable: true})
+  @Column({ nullable: true })
   title: string;
 
   @Column({ nullable: true })
   labels: string;
 
-  @ManyToOne(() => UserEntity, user => user.photos)
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   user: UserEntity;
 
   @Column()

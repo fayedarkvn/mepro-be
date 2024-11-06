@@ -1,7 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
-import { AccountEntity } from './account.entity';
-import { PhotoEntity } from './photo.entity';
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
@@ -13,6 +11,9 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   name: string;
 
+  @Column({ nullable: true })
+  username: string;
+
   @Column()
   email: string;
 
@@ -21,10 +22,4 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: UserRoleEnum.USER, enum: UserRoleEnum })
   role: string;
-
-  @OneToMany(() => AccountEntity, account => account.user)
-  accounts: AccountEntity[];
-
-  @OneToMany(() => PhotoEntity, photo => photo.user)
-  photos: PhotoEntity[];
 }

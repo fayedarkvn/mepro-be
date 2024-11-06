@@ -9,26 +9,26 @@ export enum AccountProviderEnum {
 
 @Entity('accounts')
 export class AccountEntity extends BaseEntity {
-  @Column({ nullable: true })
-  type: string;
-
   @Column({ enum: AccountProviderEnum })
   provider: string;
 
-  @Column({})
+  @Column({ nullable: true })
   providerAccountId: string;
 
   @Column({ nullable: true })
-  refreshToken: string;
+  email: string;
+
+  @Column({ nullable: true })
+  emailVerified: boolean;
 
   @Column({ nullable: true })
   accessToken: string;
 
   @Column({ nullable: true })
-  expiresIn: number;
+  refreshToken: string;
 
   @Column({ nullable: true })
-  expiresAt: Date;
+  expiryDate: Date;
 
   @Column({ nullable: true })
   tokenType: string;
@@ -42,6 +42,9 @@ export class AccountEntity extends BaseEntity {
   @Column({ nullable: true })
   sessionState: string;
 
-  @ManyToOne(() => UserEntity, user => user.accounts, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   user: UserEntity;
 }
