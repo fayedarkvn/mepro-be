@@ -4,8 +4,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
+import { resolve } from 'path';
 
 declare const module: any;
+declare global {
+  // eslint-disable-next-line no-var
+  var appRoot: string;
+};
+
+globalThis.appRoot = resolve(__dirname);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

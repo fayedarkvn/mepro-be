@@ -1,7 +1,10 @@
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { configurations } from './configurations';
 
@@ -33,6 +36,31 @@ import { configurations } from './configurations';
         logging: configService.get('db.logging'),
         autoLoadEntities: true,
         namingStrategy: new SnakeNamingStrategy(),
+      }),
+      inject: [ConfigService],
+    }),
+
+    MailerModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('mailer.host'),
+          port: configService.get('mailer.port'),
+          secure: false,
+          auth: {
+            user: configService.get('mailer.user'),
+            pass: configService.get('mailer.pass'),
+          },
+        },
+        defaults: {
+          from: configService.get('mailer.from'),
+        },
+        template: {
+          dir: join(globalThis.appRoot, 'mail', 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        }
       }),
       inject: [ConfigService],
     }),

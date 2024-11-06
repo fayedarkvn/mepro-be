@@ -1,36 +1,22 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Transporter, createTransport } from 'nodemailer';
 import { SentMessageInfo } from 'nodemailer/lib/sendmail-transport';
 import { Repository } from 'typeorm';
 import { SentEmailEntity } from '../entities/sent-email.entity';
 
 @Injectable()
-export class MailerService {
-  private transporter: Transporter;
+export class MailService {
   constructor(
     @InjectRepository(SentEmailEntity) private sentEmailRepo: Repository<SentEmailEntity>,
-    configService: ConfigService,
-  ) {
-    this.transporter = createTransport({
-      host: configService.get('mailer.host'),
-      port: configService.get('mailer.port'),
-      secure: configService.get('mailer.secure'),
-      auth: {
-        user: configService.get('mailer.user'),
-        pass: configService.get('mailer.pass'),
-      },
-      debug: configService.get('mailer.debug'),
-      from: configService.get('mailer.from'),
-    });
-  }
+    private mailerService: MailerService,
+  ) { }
 
   async sendTestEmail(email: string) {
-    const result = await this.transporter.sendMail({
+    const result = await this.mailerService.sendMail({
       to: email,
       subject: "Test Email",
-      text: "This is a test email",
+      template: 'test.hbs',
     }) as SentMessageInfo;
 
     await this.saveSentEmail(result);
