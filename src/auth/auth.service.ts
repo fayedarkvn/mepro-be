@@ -8,6 +8,7 @@ import { SALT_ROUND } from '../common/constrains/crypto';
 import { DEFAULT_IMAGE_KEY } from '../common/constrains/image';
 import { AccountEntity, AccountProviderEnum } from '../entities/account.entity';
 import { ImageEntity } from '../entities/image.entity';
+import { UserPasswordEntity } from '../entities/user-password';
 import { UserEntity } from '../entities/user.entity';
 import { GoogleOauthService } from '../google-oauth/google-oauth.service';
 import { ImagesService } from '../images/images.service';
@@ -24,6 +25,7 @@ export class AuthService {
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
     @InjectRepository(AccountEntity) private accountRepo: Repository<AccountEntity>,
     @InjectRepository(ImageEntity) private imageRepo: Repository<ImageEntity>,
+    @InjectRepository(UserPasswordEntity) private userPasswordRepo: Repository<UserPasswordEntity>,
     private jwtService: JwtService,
     private googleOAuthService: GoogleOauthService,
     private configService: ConfigService,
@@ -49,23 +51,35 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto) {
-    const account = await this.accountRepo.findOne({
-      where: {
-        provider: AccountProviderEnum.LOCAL,
-        providerAccountId: dto.username,
-      },
-      relations: {
-        user: true,
-      },
+    let user = await this.userRepo.findOne({
+      where: [
+        { username: dto.username },
+        { email: dto.username },
+      ],
     });
 
-    const isPasswordMatch = account && compareSync(dto.password, account.accessToken);
+    if (!user) {
+      const account = await this.accountRepo.findOne({
+        where: { email: dto.username },
+        relations: {
+          user: true,
+        },
+      });
+      user = account?.user;
+    }
 
+    if (!user) {
+      throw new UnauthorizedException('Not found account');
+    }
+
+    const userPassword = await this.userPasswordRepo.findOne({
+      where: { userId: user.id },
+    });
+
+    const isPasswordMatch = userPassword && compareSync(dto.password, userPassword.password);
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Username or password is not correct');
     }
-
-    const user = account.user;
 
     await this.imageService.updateImageForObject(user);
 
@@ -73,10 +87,9 @@ export class AuthService {
   }
 
   async signUp(dto: SignUpDto) {
-    const existingUser = await this.userRepo.findOne({
+    const existingUser = await this.accountRepo.findOne({
       where: { email: dto.email }
     });
-
     if (existingUser) {
       throw new BadRequestException('User already exists');
     }
@@ -86,17 +99,21 @@ export class AuthService {
       name: dto.name,
       image: DEFAULT_IMAGE_KEY.USER_AVATAR,
     });
-
     await this.userRepo.save(user);
 
     const account = this.accountRepo.create({
-      user: user,
+      user,
       provider: AccountProviderEnum.LOCAL,
-      providerAccountId: dto.email,
-      accessToken: hashSync(dto.password, SALT_ROUND),
+      email: dto.email,
     });
-
-    await this.accountRepo.save(account);
+    const userPassword = this.userPasswordRepo.create({
+      user,
+      password: hashSync(dto.password, SALT_ROUND),
+    });
+    await Promise.all([
+      this.accountRepo.save(account),
+      this.userPasswordRepo.save(userPassword),
+    ]);
 
     await this.imageService.updateImageForObject(user);
 
@@ -107,11 +124,9 @@ export class AuthService {
     const { tokens } = await this.googleOAuthService.getToken(dto.code).catch(() => {
       throw new UnauthorizedException("Invalid code");
     });
-
     const ticket = await this.googleOAuthService.verifyIdToken({ idToken: tokens.id_token }).catch(() => {
       throw new UnauthorizedException();
     });
-
     const payload = ticket.getPayload();
 
     let user = await this.userRepo.findOne({
@@ -119,7 +134,6 @@ export class AuthService {
         email: payload.email,
       },
     });
-
     let account = await this.accountRepo.findOne({
       where: {
         providerAccountId: payload.sub,
@@ -129,10 +143,9 @@ export class AuthService {
 
     if (!user) {
       const image = this.imageRepo.create({
-        key: "google_" + payload.sub,
+        key: "google@" + payload.sub,
         url: payload.picture,
       });
-
       await this.imageRepo.save(image);
 
       const newUser = this.userRepo.create({
@@ -140,7 +153,6 @@ export class AuthService {
         name: ticket.getPayload().name,
         image: image.key,
       });
-
       user = await this.userRepo.save(newUser);
     }
 
@@ -149,17 +161,26 @@ export class AuthService {
         user: user,
         provider: AccountProviderEnum.GOOGLE,
         providerAccountId: payload.sub,
+        email: payload.email,
+        emailVerified: payload.email_verified,
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
-        expiresAt: new Date(tokens.expiry_date),
+        expiryDate: new Date(tokens.expiry_date),
+        tokenType: tokens.token_type,
+        scope: tokens.scope,
+        idToken: tokens.id_token,
       });
-
       account = await this.accountRepo.save(newAccount);
     }
     else {
+      account.email = payload.email;
+      account.emailVerified = payload.email_verified;
       account.accessToken = tokens.access_token;
       account.refreshToken = tokens.refresh_token;
-      account.expiresAt = new Date(tokens.expiry_date);
+      account.expiryDate = new Date(tokens.expiry_date);
+      account.tokenType = tokens.token_type;
+      account.scope = tokens.scope;
+      account.idToken = tokens.id_token;
       await this.accountRepo.save(account);
     }
 
@@ -169,60 +190,69 @@ export class AuthService {
   }
 
   async getPassword(authenticatedUser: IAuthenticatedUser) {
-    const user = await this.userRepo.findOne({
-      where: { id: authenticatedUser.id }
-    });
-
-    const account = await this.accountRepo.findOne({
+    const userPassword = await this.userPasswordRepo.findOne({
       where: {
-        provider: AccountProviderEnum.LOCAL,
-        user: user,
+        userId: authenticatedUser.id,
       },
     });
 
-    if (!account) {
-      return {
-        updateAt: null,
-      };
-    }
+    const { updatedAt } = userPassword ?? { updatedAt: null };
 
     return {
-      updateAt: account.updatedAt,
+      updatedAt,
     };
   }
 
-  async chagePassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
-    const user = await this.userRepo.findOne({
-      where: { id: authenticatedUser.id }
-    });
-
-    const account = await this.accountRepo.findOne({
+  async createPassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
+    const userPassword = await this.userPasswordRepo.findOne({
       where: {
-        provider: AccountProviderEnum.LOCAL,
-        user: user,
+        userId: authenticatedUser.id,
       },
     });
 
-    if (!account) {
+    if (userPassword) {
+      throw new BadRequestException('User already has password');
+    }
+
+    const newUserPassword = this.userPasswordRepo.create({
+      user: { id: authenticatedUser.id },
+      password: hashSync(dto.newPassword, SALT_ROUND),
+    });
+
+    await this.userPasswordRepo.insert(newUserPassword);
+
+    return true;
+  }
+
+  async chagePassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
+    const userPassword = await this.userPasswordRepo.findOne({
+      where: {
+        userId: authenticatedUser.id,
+      },
+    });
+
+    if (!userPassword) {
       throw new BadRequestException('User does not have password');
     }
 
-    const isPasswordMatch = compareSync(dto.oldPassword, account.accessToken);
+    const isPasswordMatch = compareSync(dto.oldPassword, userPassword.password);
 
     if (!isPasswordMatch) {
       throw new BadRequestException('Old password is not correct');
     }
 
-    account.accessToken = hashSync(dto.newPassword, SALT_ROUND);
-
-    await this.accountRepo.save(account);
+    const hashedPassword = hashSync(dto.newPassword, SALT_ROUND);
+    userPassword.password = hashedPassword;
+    userPassword.save();
 
     return true;
   }
 
   async getProfile(authenticatedUser: IAuthenticatedUser) {
     const user = await this.userRepo.findOne({
-      where: { id: authenticatedUser.id }
+      where: {
+        id: authenticatedUser.id
+      }
     });
 
     await this.imageService.updateImageForObject(user);

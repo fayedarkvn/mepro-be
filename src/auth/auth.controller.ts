@@ -20,50 +20,57 @@ export class AuthController {
     private authService: AuthService
   ) { }
 
+  @Post('sign-in')
   @ApiOkResponse({ type: SignInSuccessResponseDto })
   @ApiHttpException(() => [BadRequestException, UnauthorizedException])
-  @Post('sign-in')
   @HttpCode(200)
   async signIn(@Body() dto: SignInDto) {
     return this.authService.signIn(dto);
   }
 
+  @Post('sign-up')
   @ApiOkResponse({ type: SignUpSuccessResponseDto })
   @ApiHttpException(() => [BadRequestException])
-  @Post('sign-up')
   @HttpCode(200)
   async signUp(@Body() dto: SignUpDto) {
     return this.authService.signUp(dto);
   }
 
+  @Post('google')
   @ApiOkResponse({ type: SignInSuccessResponseDto })
   @ApiHttpException(() => [BadRequestException, UnauthorizedException])
-  @Post('google')
   @HttpCode(200)
   googleSignIn(@Body() dto: GoogleOAuthDto) {
     return this.authService.googleSignIn(dto);
   }
 
+  @Get('password')
   @ApiResponse({ type: GetPasswordResponseDto })
   @ApiHttpException(() => [UnauthorizedException])
-  @Get('password')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async getPassword(@GetUser() authenticatedUser: IAuthenticatedUser) {
     return this.authService.getPassword(authenticatedUser);
   }
 
-  @ApiHttpException(() => [BadRequestException, UnauthorizedException])
   @Post('change-password')
-  @HttpCode(200)
+  @ApiHttpException(() => [BadRequestException, UnauthorizedException])
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   async changePassword(@Body() dto: ChangePasswordDto, @GetUser() authenticatedUser: IAuthenticatedUser) {
-    return this.authService.chagePassword(dto, authenticatedUser);
+    if (dto.oldPassword) {
+      return this.authService.chagePassword(dto, authenticatedUser);
+    }
+    else {
+      return this.authService.createPassword(dto, authenticatedUser);
+    }
   }
 
+  @Get('me')
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserDto })
   @ApiHttpException(() => [UnauthorizedException])
-  @Get('me')
   @UseGuards(AuthGuard)
   async getProfile(@GetUser() authenticatedUser: IAuthenticatedUser) {
     return this.authService.getProfile(authenticatedUser);
