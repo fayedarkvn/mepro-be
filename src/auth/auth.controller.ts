@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swag
 import { ApiHttpException } from '../common/decorators/api-http-exception.decorator';
 import { UserDto } from '../users/dto/user.dto';
 import { AuthService } from './auth.service';
-import { GetUser, IAuthenticatedUser } from './decorators/get-user.decorator';
+import { GetUserId } from './decorators/get-user-id.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GetPasswordResponseDto } from './dtos/get-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
@@ -49,8 +49,8 @@ export class AuthController {
   @ApiHttpException(() => [UnauthorizedException])
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async getPassword(@GetUser() authenticatedUser: IAuthenticatedUser) {
-    return this.authService.getPassword(authenticatedUser);
+  async getPassword(@GetUserId() userId: number) {
+    return this.authService.getPassword(userId);
   }
 
   @Post('change-password')
@@ -58,12 +58,12 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(200)
-  async changePassword(@Body() dto: ChangePasswordDto, @GetUser() authenticatedUser: IAuthenticatedUser) {
+  async changePassword(@Body() dto: ChangePasswordDto, @GetUserId() userId: number) {
     if (dto.oldPassword) {
-      return this.authService.chagePassword(dto, authenticatedUser);
+      return this.authService.chagePassword(dto, userId);
     }
     else {
-      return this.authService.createPassword(dto, authenticatedUser);
+      return this.authService.createPassword(dto, userId);
     }
   }
 
@@ -72,7 +72,7 @@ export class AuthController {
   @ApiOkResponse({ type: UserDto })
   @ApiHttpException(() => [UnauthorizedException])
   @UseGuards(AuthGuard)
-  async getProfile(@GetUser() authenticatedUser: IAuthenticatedUser) {
-    return this.authService.getProfile(authenticatedUser);
+  async getProfile(@GetUserId() userId: number) {
+    return this.authService.getProfile(userId);
   }
 }

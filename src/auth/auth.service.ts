@@ -12,7 +12,6 @@ import { UserPasswordEntity } from '../entities/user-password';
 import { UserEntity } from '../entities/user.entity';
 import { GoogleOauthService } from '../google-oauth/google-oauth.service';
 import { ImagesService } from '../images/images.service';
-import { IAuthenticatedUser } from './decorators/get-user.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
 import { UserJwtPayloadDto } from './dtos/jwt-payload.dto';
@@ -189,10 +188,10 @@ export class AuthService {
     return this.authenticateUser(user);
   }
 
-  async getPassword(authenticatedUser: IAuthenticatedUser) {
+  async getPassword(userId: number) {
     const userPassword = await this.userPasswordRepo.findOne({
       where: {
-        userId: authenticatedUser.id,
+        userId,
       },
     });
 
@@ -203,10 +202,10 @@ export class AuthService {
     };
   }
 
-  async createPassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
+  async createPassword(dto: ChangePasswordDto, userId: number) {
     const userPassword = await this.userPasswordRepo.findOne({
       where: {
-        userId: authenticatedUser.id,
+        userId,
       },
     });
 
@@ -215,7 +214,7 @@ export class AuthService {
     }
 
     const newUserPassword = this.userPasswordRepo.create({
-      user: { id: authenticatedUser.id },
+      userId,
       password: hashSync(dto.newPassword, SALT_ROUND),
     });
 
@@ -224,10 +223,10 @@ export class AuthService {
     return true;
   }
 
-  async chagePassword(dto: ChangePasswordDto, authenticatedUser: IAuthenticatedUser) {
+  async chagePassword(dto: ChangePasswordDto, userId: number) {
     const userPassword = await this.userPasswordRepo.findOne({
       where: {
-        userId: authenticatedUser.id,
+        userId,
       },
     });
 
@@ -248,10 +247,10 @@ export class AuthService {
     return true;
   }
 
-  async getProfile(authenticatedUser: IAuthenticatedUser) {
+  async getProfile(userId: number) {
     const user = await this.userRepo.findOne({
       where: {
-        id: authenticatedUser.id
+        id: userId,
       }
     });
 
