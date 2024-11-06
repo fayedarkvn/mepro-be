@@ -8,7 +8,7 @@ import { HealthModule } from './health/health.module';
 import { ImagesModule } from './images/images.module';
 import { UsersModule } from './users/users.module';
 import { PhotosModule } from './photos/photos.module';
-import { MailerModule } from './mailer/mailer.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { MailerModule } from './mailer/mailer.module';
     HealthModule,
     ImagesModule,
     PhotosModule,
-    MailerModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
