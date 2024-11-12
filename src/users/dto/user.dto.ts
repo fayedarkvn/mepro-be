@@ -10,6 +10,9 @@ export class UserDto extends BaseEntityDto {
   email: string;
 
   @ApiProperty({ nullable: true })
+  username: string;
+
+  @ApiProperty({ nullable: true })
   image: string;
 
   @ApiPropertyOptional({ nullable: true })
