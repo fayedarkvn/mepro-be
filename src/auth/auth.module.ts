@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountEntity } from '../entities/account.entity';
 import { ImageEntity } from '../entities/image.entity';
 import { UserPasswordEntity } from '../entities/user-password';
+import { UserTokenEntity } from '../entities/user-token';
 import { UserEntity } from '../entities/user.entity';
 import { GoogleOauthModule } from '../google-oauth/google-oauth.module';
 import { ImagesModule } from '../images/images.module';
+import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -16,9 +18,10 @@ import { ImgAuthGuard } from './guards/img-auth.guard';
 @Module({
   imports: [
     UsersModule,
-    TypeOrmModule.forFeature([UserEntity, AccountEntity, ImageEntity, UserPasswordEntity]),
+    TypeOrmModule.forFeature([UserEntity, AccountEntity, ImageEntity, UserPasswordEntity, UserTokenEntity]),
     GoogleOauthModule,
     ImagesModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard, ImgAuthGuard],

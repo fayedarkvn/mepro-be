@@ -7,6 +7,7 @@ import { GetUserId } from './decorators/get-user-id.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GetPasswordResponseDto } from './dtos/get-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
+import { MailResetPasswordDto, ResetPasswordConfirm } from './dtos/reset-password.dto';
 import { SignInDto, SignInSuccessResponseDto, } from './dtos/sign-in.dto';
 import { SignUpDto, SignUpSuccessResponseDto } from './dtos/sign-up.dto';
 import { AuthGuard } from './guards/auth.guard';
@@ -74,5 +75,19 @@ export class AuthController {
   @UseGuards(AuthGuard)
   async getProfile(@GetUserId() userId: number) {
     return this.authService.getProfile(userId);
+  }
+
+  @Post('mail-reset-password')
+  @ApiHttpException(() => [BadRequestException])
+  @HttpCode(200)
+  async resetPassword(@Body() dto: MailResetPasswordDto) {
+    return this.authService.mailResetPassword(dto);
+  }
+
+  @Post('reset-password')
+  @ApiHttpException(() => [BadRequestException])
+  @HttpCode(200)
+  async resetPasswordConfirm(@Body() dto: ResetPasswordConfirm) {
+    return this.authService.resetPasswordConfirm(dto);
   }
 }

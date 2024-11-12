@@ -1,20 +1,26 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync, hashSync } from 'bcrypt';
+import { nanoid } from 'nanoid';
 import { Repository } from 'typeorm';
 import { SALT_ROUND } from '../common/constrains/crypto';
 import { DEFAULT_IMAGE_KEY } from '../common/constrains/image';
+import { TOKEN_EXPIRATION } from '../common/constrains/token';
 import { AccountEntity, AccountProviderEnum } from '../entities/account.entity';
 import { ImageEntity } from '../entities/image.entity';
 import { UserPasswordEntity } from '../entities/user-password';
+import { TokenTypeEnum, UserTokenEntity } from '../entities/user-token';
 import { UserEntity } from '../entities/user.entity';
 import { GoogleOauthService } from '../google-oauth/google-oauth.service';
 import { ImagesService } from '../images/images.service';
+import { MailService } from '../mail/mail.service';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
 import { UserJwtPayloadDto } from './dtos/jwt-payload.dto';
+import { MailResetPasswordDto, ResetPasswordConfirm } from './dtos/reset-password.dto';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
 
@@ -25,10 +31,13 @@ export class AuthService {
     @InjectRepository(AccountEntity) private accountRepo: Repository<AccountEntity>,
     @InjectRepository(ImageEntity) private imageRepo: Repository<ImageEntity>,
     @InjectRepository(UserPasswordEntity) private userPasswordRepo: Repository<UserPasswordEntity>,
+    @InjectRepository(UserTokenEntity) private userTokenRepo: Repository<UserTokenEntity>,
     private jwtService: JwtService,
     private googleOAuthService: GoogleOauthService,
     private configService: ConfigService,
     private imageService: ImagesService,
+    private mailService: MailService,
+    private mailerService: MailerService,
   ) { }
 
   async authenticateUser(user: UserEntity) {
@@ -257,5 +266,84 @@ export class AuthService {
     await this.imageService.updateImageForObject(user);
 
     return user;
+  }
+
+  async mailResetPassword(dto: MailResetPasswordDto) {
+    const account = await this.accountRepo.findOne({
+      where: {
+        email: dto.email,
+      },
+      relations: {
+        user: true,
+      }
+    });
+
+    if (!account) {
+      throw new BadRequestException('User with this email not found');
+    }
+
+    const { user } = account;
+
+    const userToken = this.userTokenRepo.create({
+      userId: user.id,
+      token: nanoid(64),
+      tokenType: TokenTypeEnum.PASSWORD_RESET,
+      expiresAt: new Date(Date.now() + TOKEN_EXPIRATION.PASSWORD_RESET * 1000),
+    });
+
+    await userToken.save();
+
+    const code = userToken.id + '$' + userToken.token;
+
+    const resetLink = new URL(dto.endpointUrl);
+    resetLink.searchParams.append('code', code);
+
+    const result = await this.mailerService.sendMail({
+      subject: '[MePro Account] Reset Password',
+      template: 'password-reset.hbs',
+      to: account.email,
+      context: {
+        name: user.name,
+        resetLink: resetLink,
+      }
+    });
+
+    await this.mailService.saveSentEmail(result);
+
+    return true;
+  }
+
+  async resetPasswordConfirm(dto: ResetPasswordConfirm) {
+    const [tokenId, token] = dto.code.split('$');
+
+    const userToken = await this.userTokenRepo.findOne({
+      where: {
+        id: tokenId
+      },
+    });
+
+    if (
+      !userToken ||
+      userToken.token !== token ||
+      userToken.tokenType !== TokenTypeEnum.PASSWORD_RESET ||
+      userToken.expiresAt < new Date() ||
+      userToken.revoked
+    ) {
+      throw new BadRequestException('Invalid Code');
+    }
+
+    userToken.revoked = true;
+
+    const userPassword = await this.userPasswordRepo.findOne({
+      where: {
+        userId: userToken.userId,
+      },
+    });
+
+    userPassword.password = hashSync(dto.newPassword, SALT_ROUND);
+
+    await Promise.all([userToken.save(), userPassword.save()]);
+
+    return true;
   }
 }
