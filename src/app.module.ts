@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { HttpLoggerMiddleware } from './common/logger/http-logger.middleware';
 import { GlobalConfigModule } from './config/global-config.module';
 import { HealthModule } from './health/health.module';
-import { ImagesModule } from './images/images.module';
+import { ImageModule } from './providers/images/images.module';
 import { UsersModule } from './users/users.module';
 import { PhotosModule } from './photos/photos.module';
 import { MailModule } from './mail/mail.module';
@@ -16,7 +16,7 @@ import { MailModule } from './mail/mail.module';
     AuthModule,
     UsersModule,
     HealthModule,
-    ImagesModule,
+    ImageModule,
     PhotosModule,
     MailModule,
   ],

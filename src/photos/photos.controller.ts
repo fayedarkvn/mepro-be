@@ -6,7 +6,7 @@ import { GetUser, IAuthenticatedUser } from '../auth/decorators/get-user.decorat
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { parseImagePipe } from '../common/pipes/parse-image.pipe';
 import { PhotoEntity } from '../entities/photo.entity';
-import { ImageResloverInterceptor } from '../images/interceptors/image-reslover-interceptors';
+import { ImageResloverInterceptor } from '../providers/images/interceptors/image-reslover-interceptors';
 import { PhotoDto } from './dtos/photo.dto';
 import { UpdatePhotoDto } from './dtos/update-photo.dto';
 import { UploadPhotoDto } from './dtos/upload-photo.dto';

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ImageEntity } from '../entities/image.entity';
+import { ImageEntity } from '../../entities/image.entity';
 import { ImagekitModule } from '../imagekit/imagekit.module';
 import { S3Module } from '../s3/s3.module';
-import { ImagesService } from './images.service';
+import { ImageService } from './images.service';
 import { ImageResloverInterceptor } from './interceptors/image-reslover-interceptors';
 
 @Module({
@@ -12,7 +12,7 @@ import { ImageResloverInterceptor } from './interceptors/image-reslover-intercep
     S3Module,
     ImagekitModule,
   ],
-  providers: [ImagesService, ImageResloverInterceptor],
-  exports: [ImagesService, ImageResloverInterceptor]
+  providers: [ImageService, ImageResloverInterceptor],
+  exports: [ImageService, ImageResloverInterceptor]
 })
-export class ImagesModule { }
+export class ImageModule { }

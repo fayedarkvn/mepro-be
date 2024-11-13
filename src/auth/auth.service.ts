@@ -14,8 +14,8 @@ import { ImageEntity } from '../entities/image.entity';
 import { UserPasswordEntity } from '../entities/user-password';
 import { TokenTypeEnum, UserTokenEntity } from '../entities/user-token';
 import { UserEntity } from '../entities/user.entity';
-import { GoogleOauthService } from '../google-oauth/google-oauth.service';
-import { ImagesService } from '../images/images.service';
+import { GoogleOauthService } from '../providers/google-oauth/google-oauth.service';
+import { ImageService } from '../providers/images/images.service';
 import { MailService } from '../mail/mail.service';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
@@ -35,7 +35,7 @@ export class AuthService {
     private jwtService: JwtService,
     private googleOAuthService: GoogleOauthService,
     private configService: ConfigService,
-    private imageService: ImagesService,
+    private imageService: ImageService,
     private mailService: MailService,
     private mailerService: MailerService,
   ) { }

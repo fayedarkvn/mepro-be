@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { UserEntity } from '../entities/user.entity';
-import { ImageResloverInterceptor } from '../images/interceptors/image-reslover-interceptors';
+import { ImageResloverInterceptor } from '../providers/images/interceptors/image-reslover-interceptors';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
