@@ -8,7 +8,7 @@ import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GetPasswordResponseDto } from './dtos/get-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
 import { MailResetPasswordDto, ResetPasswordConfirm } from './dtos/reset-password.dto';
-import { SignInDto, SignInSuccessResponseDto, } from './dtos/sign-in.dto';
+import { SignInDto, SignInSuccessResponseDto } from './dtos/sign-in.dto';
 import { SignUpDto, SignUpSuccessResponseDto } from './dtos/sign-up.dto';
 import { AuthGuard } from './guards/auth.guard';
 
@@ -18,7 +18,7 @@ import { AuthGuard } from './guards/auth.guard';
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
   ) { }
 
   @Post('sign-in')

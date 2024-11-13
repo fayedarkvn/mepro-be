@@ -96,7 +96,7 @@ export class AuthService {
 
   async signUp(dto: SignUpDto) {
     const existingUser = await this.accountRepo.findOne({
-      where: { email: dto.email }
+      where: { email: dto.email },
     });
     if (existingUser) {
       throw new BadRequestException('User already exists');
@@ -260,7 +260,7 @@ export class AuthService {
     const user = await this.userRepo.findOne({
       where: {
         id: userId,
-      }
+      },
     });
 
     await this.imageService.updateImageForObject(user);
@@ -275,7 +275,7 @@ export class AuthService {
       },
       relations: {
         user: true,
-      }
+      },
     });
 
     if (!account) {
@@ -305,7 +305,7 @@ export class AuthService {
       context: {
         name: user.name,
         resetLink: resetLink,
-      }
+      },
     });
 
     await this.mailService.saveSentEmail(result);
@@ -318,7 +318,7 @@ export class AuthService {
 
     const userToken = await this.userTokenRepo.findOne({
       where: {
-        id: tokenId
+        id: tokenId,
       },
     });
 

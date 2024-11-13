@@ -21,7 +21,7 @@ import { UsersService } from './users.service';
   dto: {
     create: CreateUserDto,
     update: UpdateUserDto,
-  }
+  },
 })
 export class UsersController implements CrudController<UserEntity> {
   constructor(public service: UsersService) { }

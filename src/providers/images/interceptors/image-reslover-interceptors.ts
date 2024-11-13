@@ -5,7 +5,7 @@ import { ImageService } from '../images.service';
 @Injectable()
 export class ImageResloverInterceptor<T> implements NestInterceptor<T> {
   constructor(
-    private imagesService: ImageService
+    private imagesService: ImageService,
   ) { }
 
   intercept(_context: ExecutionContext, next: CallHandler) {
@@ -29,7 +29,7 @@ export class ImageResloverInterceptor<T> implements NestInterceptor<T> {
         }
 
         return data;
-      })
+      }),
     );
   }
 }

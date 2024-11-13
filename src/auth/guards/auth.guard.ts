@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
 
   protected async verifyToken(token: string) {
     return this.jwtService.verify(token, {
-      secret: this.configService.get('jwt.secret')
+      secret: this.configService.get('jwt.secret'),
     });
   }
 

@@ -11,5 +11,5 @@ export const GetImgJwtPayload = createParamDecorator(
     }
 
     return null;
-  }
+  },
 );

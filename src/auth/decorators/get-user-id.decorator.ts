@@ -9,5 +9,5 @@ export const GetUserId = createParamDecorator(
       return ticket.sub;
     }
     return null;
-  }
+  },
 );

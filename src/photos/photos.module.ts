@@ -15,7 +15,7 @@ import { PhotosService } from './photos.service';
     ImagekitModule,
   ],
   controllers: [PhotosController],
-  providers: [PhotosService]
+  providers: [PhotosService],
 
 })
 export class PhotosModule { }

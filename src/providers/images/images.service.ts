@@ -41,7 +41,7 @@ export class ImageService {
     const fileHash = createHash('md5').update(file.buffer).digest('base64url');
 
     const existingImage = await this.imageRepo.findOne({
-      where: { key: fileHash }
+      where: { key: fileHash },
     });
 
     if (existingImage) {
@@ -159,7 +159,7 @@ export class ImageService {
       where: [
         { key: In(keys), provider: In(this.enabledProviders) },
         { key: In(keys), providerPublicAccess: true },
-      ]
+      ],
     });
 
     const result: { [key: string]: ImageEntity; } = {};

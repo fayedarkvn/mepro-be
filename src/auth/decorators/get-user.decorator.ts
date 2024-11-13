@@ -19,5 +19,5 @@ export const GetUser = createParamDecorator(
       } as IAuthenticatedUser;
     }
     return null;
-  }
+  },
 );

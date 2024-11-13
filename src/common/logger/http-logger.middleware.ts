@@ -15,7 +15,7 @@ export class HttpLoggerMiddleware implements NestMiddleware {
       JSON.stringify(`${method} ${originalUrl} HTTP${httpVersion}`) + " " +
       statusCode + " " +
       JSON.stringify(userAgent) + " " +
-      JSON.stringify(ip)
+      JSON.stringify(ip),
     );
 
     next();

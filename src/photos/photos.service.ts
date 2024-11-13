@@ -42,7 +42,7 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
     req.parsed.search.$and.push({
       'user.id': {
         $eq: authenticatedUser.id,
-      }
+      },
     });
 
     return this.getMany(req);
@@ -71,7 +71,7 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
     return this.photoRepo.findOneOrFail({
       where: {
         id: id,
-        user: { id: userId }
+        user: { id: userId },
       },
     }).catch(() => {
       throw new NotFoundException('Photo not found');

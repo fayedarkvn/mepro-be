@@ -13,6 +13,6 @@ import { ImageResloverInterceptor } from './interceptors/image-reslover-intercep
     ImagekitModule,
   ],
   providers: [ImageService, ImageResloverInterceptor],
-  exports: [ImageService, ImageResloverInterceptor]
+  exports: [ImageService, ImageResloverInterceptor],
 })
 export class ImageModule { }

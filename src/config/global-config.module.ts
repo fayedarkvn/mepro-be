@@ -60,7 +60,7 @@ import { configurations } from './configurations';
           options: {
             strict: true,
           },
-        }
+        },
       }),
       inject: [ConfigService],
     }),

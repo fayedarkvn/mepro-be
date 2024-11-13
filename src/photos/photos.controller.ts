@@ -34,8 +34,8 @@ import { PhotosService } from './photos.service';
         eager: true,
         select: false,
       },
-    }
-  }
+    },
+  },
 })
 export class PhotosController implements CrudController<PhotoEntity> {
   constructor(
@@ -49,7 +49,7 @@ export class PhotosController implements CrudController<PhotoEntity> {
   upload(
     @Body() dto: UploadPhotoDto,
     @GetUser() authenticatedUser: IAuthenticatedUser,
-    @UploadedFile(parseImagePipe) file: Express.Multer.File
+    @UploadedFile(parseImagePipe) file: Express.Multer.File,
   ) {
     return this.service.uploadPhoto(dto, authenticatedUser, file);
   }
@@ -57,7 +57,7 @@ export class PhotosController implements CrudController<PhotoEntity> {
   @Override()
   getMany(
     @ParsedRequest() req: CrudRequest,
-    @GetUser() authenticatedUser: IAuthenticatedUser
+    @GetUser() authenticatedUser: IAuthenticatedUser,
   ) {
     return this.service.getManyCustom(req, authenticatedUser);
   }
@@ -65,7 +65,7 @@ export class PhotosController implements CrudController<PhotoEntity> {
   @Override()
   getOne(
     @Param('id') id: string,
-    @GetUser() auththenicatedUser: IAuthenticatedUser
+    @GetUser() auththenicatedUser: IAuthenticatedUser,
   ) {
     return this.service.getOneCustom(id, auththenicatedUser);
   }
@@ -74,7 +74,7 @@ export class PhotosController implements CrudController<PhotoEntity> {
   updateOne(
     @Param('id') id: string,
     @GetUser() auththenicatedUser: IAuthenticatedUser,
-    @Body() dto: UpdatePhotoDto
+    @Body() dto: UpdatePhotoDto,
   ) {
     return this.service.updateOneCustom(id, auththenicatedUser, dto);
   }
@@ -82,7 +82,7 @@ export class PhotosController implements CrudController<PhotoEntity> {
   @Override()
   deleteOne(
     @Param('id') id: string,
-    @GetUser() auththenicatedUser: IAuthenticatedUser
+    @GetUser() auththenicatedUser: IAuthenticatedUser,
   ) {
     return this.service.deleteOneCustom(id, auththenicatedUser);
   }
