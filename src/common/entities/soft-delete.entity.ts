@@ -4,6 +4,6 @@ import { BaseEntity } from "./base.entity";
 
 export class SoftDeleteEntity extends BaseEntity {
   @Exclude()
-  @DeleteDateColumn({ type: 'timestamp', default: null, nullable: true, })
+  @DeleteDateColumn({ type: 'timestamp', default: null, nullable: true })
   deletedAt: Date;
 }

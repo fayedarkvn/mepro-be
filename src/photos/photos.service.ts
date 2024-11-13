@@ -6,7 +6,7 @@ import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { IAuthenticatedUser } from '../auth/decorators/get-user.decorator';
 import { PhotoEntity } from '../entities/photo.entity';
-import { ImagesService } from '../images/images.service';
+import { ImageService } from '../providers/images/images.service';
 import { PhotoDto } from './dtos/photo.dto';
 import { UploadPhotoDto } from './dtos/upload-photo.dto';
 
@@ -14,7 +14,7 @@ import { UploadPhotoDto } from './dtos/upload-photo.dto';
 export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
   constructor(
     @InjectRepository(PhotoEntity) private photoRepo: Repository<PhotoEntity>,
-    private imageService: ImagesService,
+    private imageService: ImageService,
 
   ) {
     super(photoRepo);
@@ -42,7 +42,7 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
     req.parsed.search.$and.push({
       'user.id': {
         $eq: authenticatedUser.id,
-      }
+      },
     });
 
     return this.getMany(req);
@@ -71,7 +71,7 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
     return this.photoRepo.findOneOrFail({
       where: {
         id: id,
-        user: { id: userId }
+        user: { id: userId },
       },
     }).catch(() => {
       throw new NotFoundException('Photo not found');

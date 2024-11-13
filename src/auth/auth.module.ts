@@ -6,8 +6,8 @@ import { ImageEntity } from '../entities/image.entity';
 import { UserPasswordEntity } from '../entities/user-password';
 import { UserTokenEntity } from '../entities/user-token';
 import { UserEntity } from '../entities/user.entity';
-import { GoogleOauthModule } from '../google-oauth/google-oauth.module';
-import { ImagesModule } from '../images/images.module';
+import { GoogleOauthModule } from '../providers/google-oauth/google-oauth.module';
+import { ImageModule } from '../providers/images/images.module';
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
@@ -20,7 +20,7 @@ import { ImgAuthGuard } from './guards/img-auth.guard';
     UsersModule,
     TypeOrmModule.forFeature([UserEntity, AccountEntity, ImageEntity, UserPasswordEntity, UserTokenEntity]),
     GoogleOauthModule,
-    ImagesModule,
+    ImageModule,
     MailModule,
   ],
   controllers: [AuthController],

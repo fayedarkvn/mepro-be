@@ -18,7 +18,7 @@ export class S3Service {
       credentials: {
         accessKeyId: configService.get("s3.accessKeyId"),
         secretAccessKey: configService.get("s3.secretAccessKey"),
-      }
+      },
     });
 
     this.bucketName = configService.get("s3.bucketName");
@@ -36,7 +36,7 @@ export class S3Service {
   async generatePreSignedUrl(key: string, options?: RequestPresigningArguments) {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
-      Key: key
+      Key: key,
     });
     return getSignedUrl(this.client, command, options);
   }

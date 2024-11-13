@@ -14,8 +14,8 @@ import { ImageEntity } from '../entities/image.entity';
 import { UserPasswordEntity } from '../entities/user-password';
 import { TokenTypeEnum, UserTokenEntity } from '../entities/user-token';
 import { UserEntity } from '../entities/user.entity';
-import { GoogleOauthService } from '../google-oauth/google-oauth.service';
-import { ImagesService } from '../images/images.service';
+import { GoogleOauthService } from '../providers/google-oauth/google-oauth.service';
+import { ImageService } from '../providers/images/images.service';
 import { MailService } from '../mail/mail.service';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { GoogleOAuthDto } from './dtos/google-oauth.dto';
@@ -35,7 +35,7 @@ export class AuthService {
     private jwtService: JwtService,
     private googleOAuthService: GoogleOauthService,
     private configService: ConfigService,
-    private imageService: ImagesService,
+    private imageService: ImageService,
     private mailService: MailService,
     private mailerService: MailerService,
   ) { }
@@ -96,7 +96,7 @@ export class AuthService {
 
   async signUp(dto: SignUpDto) {
     const existingUser = await this.accountRepo.findOne({
-      where: { email: dto.email }
+      where: { email: dto.email },
     });
     if (existingUser) {
       throw new BadRequestException('User already exists');
@@ -260,7 +260,7 @@ export class AuthService {
     const user = await this.userRepo.findOne({
       where: {
         id: userId,
-      }
+      },
     });
 
     await this.imageService.updateImageForObject(user);
@@ -275,7 +275,7 @@ export class AuthService {
       },
       relations: {
         user: true,
-      }
+      },
     });
 
     if (!account) {
@@ -305,7 +305,7 @@ export class AuthService {
       context: {
         name: user.name,
         resetLink: resetLink,
-      }
+      },
     });
 
     await this.mailService.saveSentEmail(result);
@@ -318,7 +318,7 @@ export class AuthService {
 
     const userToken = await this.userTokenRepo.findOne({
       where: {
-        id: tokenId
+        id: tokenId,
       },
     });
 

@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { createHash } from 'crypto';
 import { partition } from 'lodash';
 import { In, Repository } from 'typeorm';
-import { IMAGE_PROVIDER } from '../common/constrains/image';
-import { ImageEntity } from '../entities/image.entity';
+import { IMAGE_PROVIDER } from '../../common/constrains/image';
+import { ImageEntity } from '../../entities/image.entity';
 import { ImagekitService } from '../imagekit/imagekit.service';
 import { S3Service } from '../s3/s3.service';
 
@@ -15,7 +15,7 @@ export type IReslovedUrls = { [key: string]: string; };
 export type IReslovedUrlsArray = IReslovedUrls[];
 
 @Injectable()
-export class ImagesService {
+export class ImageService {
   enabledProviders: string[];
   providerPriority: { [key: string]: number; };
   constructor(
@@ -41,7 +41,7 @@ export class ImagesService {
     const fileHash = createHash('md5').update(file.buffer).digest('base64url');
 
     const existingImage = await this.imageRepo.findOne({
-      where: { key: fileHash }
+      where: { key: fileHash },
     });
 
     if (existingImage) {
@@ -159,7 +159,7 @@ export class ImagesService {
       where: [
         { key: In(keys), provider: In(this.enabledProviders) },
         { key: In(keys), providerPublicAccess: true },
-      ]
+      ],
     });
 
     const result: { [key: string]: ImageEntity; } = {};

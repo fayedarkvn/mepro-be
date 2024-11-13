@@ -34,6 +34,7 @@ export default tseslint.config(
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'comma-dangle': ['error', 'always-multiline'],
       'check-file/filename-naming-convention': [
         'error',
         {
@@ -44,9 +45,10 @@ export default tseslint.config(
         },
       ],
     },
+    ignores: ['node_modules/**/*', 'dist/**/*'],
   },
   {
     files: ['**/*.js'],
-    ignores: ['node_modules', 'dist'],
+    ignores: ['node_modules/**/*', 'dist/**/*'],
   },
 );

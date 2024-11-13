@@ -2,5 +2,5 @@ import { buildTemplatedApiExceptionDecorator } from "@nanogiants/nestjs-swagger-
 
 export const ApiHttpException = buildTemplatedApiExceptionDecorator({
   statusCode: '$status',
-  message: '$description'
+  message: '$description',
 });

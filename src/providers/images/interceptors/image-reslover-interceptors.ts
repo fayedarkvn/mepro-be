@@ -1,11 +1,11 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { map } from 'rxjs/operators';
-import { ImagesService } from '../../images/images.service';
+import { ImageService } from '../images.service';
 
 @Injectable()
 export class ImageResloverInterceptor<T> implements NestInterceptor<T> {
   constructor(
-    private imagesService: ImagesService
+    private imagesService: ImageService,
   ) { }
 
   intercept(_context: ExecutionContext, next: CallHandler) {
@@ -29,7 +29,7 @@ export class ImageResloverInterceptor<T> implements NestInterceptor<T> {
         }
 
         return data;
-      })
+      }),
     );
   }
 }

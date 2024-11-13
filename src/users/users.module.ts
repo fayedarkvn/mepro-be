@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IsUniqueConstraint } from '../common/validators/is-unique.validator';
 import { UserEntity } from '../entities/user.entity';
-import { ImagesModule } from '../images/images.module';
+import { ImageModule } from '../providers/images/images.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
-    ImagesModule,
+    ImageModule,
   ],
   providers: [UsersService, IsUniqueConstraint],
   exports: [UsersService],
