@@ -9,19 +9,19 @@ export class SentEmailEntity extends BaseEntityWithBigintId {
   messageId: string;
 
   @JsonColumn({ nullable: true })
-  envelope: SentMessageInfo["envelope"];
+  envelope: SentMessageInfo['envelope'];
 
   @JsonColumn({ nullable: true })
-  accepted: SentMessageInfo["accepted"];
+  accepted: SentMessageInfo['accepted'];
 
   @JsonColumn({ nullable: true })
-  rejected: SentMessageInfo["rejected"];
+  rejected: SentMessageInfo['rejected'];
 
   @JsonColumn({ nullable: true })
-  pending: SentMessageInfo["pending"];
+  pending: SentMessageInfo['pending'];
 
   @JsonColumn({ nullable: true })
-  response: SentMessageInfo["response"];
+  response: SentMessageInfo['response'];
 
   @JsonColumn({ nullable: true })
   extra: any;

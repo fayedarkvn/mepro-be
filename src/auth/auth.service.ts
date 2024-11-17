@@ -43,7 +43,7 @@ export class AuthService {
   async authenticateUser(user: UserEntity) {
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const payload: UserJwtPayloadDto = {
-      service: "auth",
+      service: 'auth',
       sub: user.id,
       email: user.email,
       role: user.role,
@@ -130,7 +130,7 @@ export class AuthService {
 
   async googleSignIn(dto: GoogleOAuthDto) {
     const { tokens } = await this.googleOAuthService.getToken(dto.code).catch(() => {
-      throw new UnauthorizedException("Invalid code");
+      throw new UnauthorizedException('Invalid code');
     });
     const ticket = await this.googleOAuthService.verifyIdToken({ idToken: tokens.id_token }).catch(() => {
       throw new UnauthorizedException();
@@ -151,7 +151,7 @@ export class AuthService {
 
     if (!user) {
       const image = this.imageRepo.create({
-        key: "google@" + payload.sub,
+        key: `google@${payload.sub}`,
         url: payload.picture,
       });
       await this.imageRepo.save(image);
@@ -166,7 +166,7 @@ export class AuthService {
 
     if (!account) {
       const newAccount = this.accountRepo.create({
-        user: user,
+        user,
         provider: AccountProviderEnum.GOOGLE,
         providerAccountId: payload.sub,
         email: payload.email,
@@ -293,7 +293,7 @@ export class AuthService {
 
     await userToken.save();
 
-    const code = userToken.id + '$' + userToken.token;
+    const code = `${userToken.id}$${userToken.token}`;
 
     const resetLink = new URL(dto.endpointUrl);
     resetLink.searchParams.append('code', code);
@@ -304,7 +304,7 @@ export class AuthService {
       to: account.email,
       context: {
         name: user.name,
-        resetLink: resetLink,
+        resetLink,
       },
     });
 
@@ -323,11 +323,11 @@ export class AuthService {
     });
 
     if (
-      !userToken ||
-      userToken.token !== token ||
-      userToken.tokenType !== TokenTypeEnum.PASSWORD_RESET ||
-      userToken.expiresAt < new Date() ||
-      userToken.revoked
+      !userToken
+      || userToken.token !== token
+      || userToken.tokenType !== TokenTypeEnum.PASSWORD_RESET
+      || userToken.expiresAt < new Date()
+      || userToken.revoked
     ) {
       throw new BadRequestException('Invalid Code');
     }

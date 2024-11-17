@@ -64,13 +64,12 @@ export class PhotosService extends TypeOrmCrudService<PhotoEntity> {
   async deleteOneCustom(id: string, authenticatedUser: IAuthenticatedUser) {
     const photo = await this.findPhotoWithUser(id, authenticatedUser.id);
     await this.photoRepo.delete(photo.id);
-    return;
   }
 
   async findPhotoWithUser(id: string, userId: number) {
     return this.photoRepo.findOneOrFail({
       where: {
-        id: id,
+        id,
         user: { id: userId },
       },
     }).catch(() => {

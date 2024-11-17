@@ -8,6 +8,7 @@ export class HealthService {
     private memory: MemoryHealthIndicator,
     private db: TypeOrmHealthIndicator,
   ) { }
+
   async check() {
     return this.health.check([
       () => this.db.pingCheck('database'),

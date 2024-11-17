@@ -1,13 +1,13 @@
 app:
-  name: 'Me Pro'
+  name: Me Pro
   port: 4011
 
 db:
-  host: 'localhost'
+  host: localhost
   port: 5432
-  username: 'postgres'
-  password: 'postgres'
-  database: 'mepro-dev'
+  username: postgres
+  password: postgres
+  database: mepro-dev
   synchronize: true
   logging:
     - info
@@ -15,11 +15,11 @@ db:
 
 oauth:
   google:
-    clientID: 'app-id.apps.googleusercontent.com'
-    clientSecret: 'app-client-secret'
+    clientID: app-id.apps.googleusercontent.com
+    clientSecret: app-client-secret
 
 jwt:
-  secret: 'jwt-secret'
+  secret: jwt-secret
   expiresIn: 2880
 
 image:
@@ -27,15 +27,15 @@ image:
     - s3
 
 s3:
-  region: 'us-east-1'
-  bucketName: 'bucket-name'
-  accessKeyId: 'access-key-id'
-  secretAccessKey: 'secret-access-key'
+  region: us-east-1
+  bucketName: bucket-name
+  accessKeyId: access-key-id
+  secretAccessKey: secret-access-key
 
 imagekit:
-  urlEndpoint: "imagekit-url-endpoint"
-  publicKey: "public_key"
-  privateKey: "private_key"
+  urlEndpoint: imagekit-url-endpoint
+  publicKey: public_key
+  privateKey: private_key
 
 mailer:
   host: smtp.office365.com

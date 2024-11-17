@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
-import { BaseEntity } from "../common/entities/base.entity";
-import { UserEntity } from "./user.entity";
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { BaseEntity } from '../common/entities/base.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('user_password')
 export class UserPasswordEntity extends BaseEntity {

@@ -17,7 +17,7 @@ export function IsUnique(
   return (object: any, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       options: validationOptions,
       constraints: [entityClass, property],
       validator: IsUniqueConstraint,

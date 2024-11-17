@@ -12,10 +12,7 @@ export class HttpLoggerMiddleware implements NestMiddleware {
     const userAgent = request.get('user-agent') || '';
 
     this.logger.log(
-      JSON.stringify(`${method} ${originalUrl} HTTP${httpVersion}`) + " " +
-      statusCode + " " +
-      JSON.stringify(userAgent) + " " +
-      JSON.stringify(ip),
+      `${JSON.stringify(`${method} ${originalUrl} HTTP${httpVersion}`)} ${statusCode} ${JSON.stringify(userAgent)} ${JSON.stringify(ip)}`,
     );
 
     next();

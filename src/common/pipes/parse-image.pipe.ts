@@ -1,4 +1,4 @@
-import { FileTypeValidator, MaxFileSizeValidator, ParseFilePipe } from "@nestjs/common";
+import { FileTypeValidator, MaxFileSizeValidator, ParseFilePipe } from '@nestjs/common';
 
 export const parseImagePipe = new ParseFilePipe({
   validators: [

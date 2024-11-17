@@ -7,7 +7,7 @@ export enum ImageUacEnum {
 
 @Entity('image')
 export class ImageEntity {
-  @PrimaryGeneratedColumn({ type: "bigint" })
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
   @Column({ nullable: true })
