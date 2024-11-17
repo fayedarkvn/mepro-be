@@ -4,11 +4,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 declare const module: any;
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, vars-on-top
   var appRoot: string;
 };
 

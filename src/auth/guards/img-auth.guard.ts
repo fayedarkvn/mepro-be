@@ -9,7 +9,7 @@ export class ImgAuthGuard extends AuthGuard {
 
     const token = request.query?.token;
     if (!token) {
-      request["ticket"] = null;
+      request.ticket = null;
       return true;
     }
 
@@ -21,7 +21,7 @@ export class ImgAuthGuard extends AuthGuard {
       throw new UnauthorizedException(err.message);
     });
 
-    request["ticket"] = payloadDto;
+    request.ticket = payloadDto;
     return true;
   }
 }

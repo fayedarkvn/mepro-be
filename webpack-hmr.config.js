@@ -1,6 +1,6 @@
-const nodeExternals = require('webpack-node-externals');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = function (options, webpack) {
   return {
@@ -21,7 +21,7 @@ module.exports = function (options, webpack) {
       new CopyWebpackPlugin({
         patterns: [
           { from: 'src/mail/templates' },
-        ]
+        ],
       }),
     ],
   };

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import ImageKit from "imagekit";
+import ImageKit from 'imagekit';
 import { UrlOptions } from 'imagekit/dist/libs/interfaces';
 
 @Injectable()
@@ -10,14 +10,14 @@ export class ImagekitService {
     configService: ConfigService,
   ) {
     this.client = new ImageKit({
-      publicKey: configService.get("imagekit.publicKey"),
-      privateKey: configService.get("imagekit.privateKey"),
-      urlEndpoint: configService.get("imagekit.urlEndpoint"),
+      publicKey: configService.get('imagekit.publicKey'),
+      privateKey: configService.get('imagekit.privateKey'),
+      urlEndpoint: configService.get('imagekit.urlEndpoint'),
     });
   }
 
   generateSignedUrls(keys: string[], options?: UrlOptions) {
-    return keys.map((key) => this.generateSignedUrl(key, options));
+    return keys.map(key => this.generateSignedUrl(key, options));
   }
 
   generateSignedUrl(key: string, options?: UrlOptions) {

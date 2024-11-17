@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsString, IsUrl } from "class-validator";
+import { IsString, IsUrl } from 'class-validator';
 
 export class MailResetPasswordDto {
   @ApiProperty()

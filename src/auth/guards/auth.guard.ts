@@ -1,4 +1,3 @@
-
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -29,7 +28,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException(err.message);
     });
 
-    request["ticket"] = payloadDto;
+    request.ticket = payloadDto;
     return true;
   }
 

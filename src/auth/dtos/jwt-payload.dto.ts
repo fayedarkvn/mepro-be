@@ -22,11 +22,11 @@ export class UserJwtPayloadDto extends JwtPayloadDto {
   @IsIn(Object.values(UserRoleEnum))
   role: string;
 
-  @Equals("auth")
-  service: "auth";
+  @Equals('auth')
+  service: 'auth';
 }
 
 export class ImgJwtPayloadDto extends JwtPayloadDto {
-  @Equals("image")
-  service: "image";
+  @Equals('image')
+  service: 'image';
 }

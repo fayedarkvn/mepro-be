@@ -1,7 +1,7 @@
 import { flatten, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import { partition } from 'lodash';
 import { In, Repository } from 'typeorm';
 import { IMAGE_PROVIDER } from '../../common/constrains/image';
@@ -9,15 +9,15 @@ import { ImageEntity } from '../../entities/image.entity';
 import { ImagekitService } from '../imagekit/imagekit.service';
 import { S3Service } from '../s3/s3.service';
 
-export type IImageKeys = { [key: string]: string; };
+export interface IImageKeys { [key: string]: string }
 export type IImageKeysArray = IImageKeys[];
-export type IReslovedUrls = { [key: string]: string; };
+export interface IReslovedUrls { [key: string]: string }
 export type IReslovedUrlsArray = IReslovedUrls[];
 
 @Injectable()
 export class ImageService {
   enabledProviders: string[];
-  providerPriority: { [key: string]: number; };
+  providerPriority: { [key: string]: number };
   constructor(
     @InjectRepository(ImageEntity) private imageRepo: Repository<ImageEntity>,
     private s3Service: S3Service,
@@ -30,7 +30,7 @@ export class ImageService {
     const providerPriority = enabledProviders.reduce((acc, provider, index) => {
       acc[provider] = index;
       return acc;
-    }, {} as { [key: string]: number; });
+    }, {} as { [key: string]: number });
     this.providerPriority = providerPriority;
 
     const logger = new Logger('ImagesService');
@@ -51,7 +51,7 @@ export class ImageService {
     const uploadResponse = await this.imagekitService.client.upload({
       file: file.buffer,
       fileName: fileHash,
-      folder: "default",
+      folder: 'default',
     });
 
     const image = this.imageRepo.create({
@@ -64,7 +64,7 @@ export class ImageService {
     return image;
   }
 
-  async updateImageForObject(data: { [key: string]: any; }) {
+  async updateImageForObject(data: { [key: string]: any }) {
     const imageKeys = this.getImageKeysInObject(data);
     const reslovedUrls = await this.resloveImageKeys(imageKeys);
     for (const [key, value] of Object.entries(reslovedUrls)) {
@@ -73,7 +73,7 @@ export class ImageService {
   }
 
   async updateImageForArray(data: any[]) {
-    const imageKeysArray = data.map((item) => this.getImageKeysInObject(item));
+    const imageKeysArray = data.map(item => this.getImageKeysInObject(item));
     const reslovedUrlsArray = await this.resloveImageKeysArray(imageKeysArray);
     data.forEach((item, index) => {
       for (const [key, value] of Object.entries(reslovedUrlsArray[index])) {
@@ -82,14 +82,14 @@ export class ImageService {
     });
   }
 
-  async resolveImageForObject(data: { [key: string]: any; }) {
+  async resolveImageForObject(data: { [key: string]: any }) {
     const imageKeys = this.getImageKeysInObject(data);
     const reslovedUrls = await this.resloveImageKeys(imageKeys);
     return { ...data, ...reslovedUrls };
   };
 
   async resolveImageForArray(data: any[]) {
-    const imageKeysArray = data.map((item) => this.getImageKeysInObject(item));
+    const imageKeysArray = data.map(item => this.getImageKeysInObject(item));
     const reslovedUrlsArray = await this.resloveImageKeysArray(imageKeysArray);
     return data.map((item, index) => ({ ...item, ...reslovedUrlsArray[index] }));
   };
@@ -101,7 +101,7 @@ export class ImageService {
     const images = await this.selectByImageKeys(ids);
     const reslovedImages = await this.resloveImage(images);
 
-    return this.mapImageToObejct(keys, reslovedImages, imageKeys);;
+    return this.mapImageToObejct(keys, reslovedImages, imageKeys); ;
   }
 
   async resloveImageKeysArray(imageKeysArray: IImageKeys[]): Promise<IReslovedUrlsArray> {
@@ -109,7 +109,7 @@ export class ImageService {
     const images = await this.selectByImageKeys(ids);
     const reslovedImages = await this.resloveImage(images);
 
-    const reslovedArray = imageKeysArray.map(imageKeys => {
+    const reslovedArray = imageKeysArray.map((imageKeys) => {
       const keys = Object.keys(imageKeys);
       return this.mapImageToObejct(keys, reslovedImages, imageKeys);
     });
@@ -162,13 +162,13 @@ export class ImageService {
       ],
     });
 
-    const result: { [key: string]: ImageEntity; } = {};
+    const result: { [key: string]: ImageEntity } = {};
 
     entities.forEach((image) => {
       const existingImage = result[image.key];
       if (
-        !existingImage ||
-        this.providerPriority[image.provider] < this.providerPriority[existingImage.provider]
+        !existingImage
+        || this.providerPriority[image.provider] < this.providerPriority[existingImage.provider]
       ) {
         result[image.key] = image;
       }
@@ -177,8 +177,8 @@ export class ImageService {
     return Object.values(result);
   }
 
-  private getImageKeysInObject(data: { [key: string]: any; }) {
-    const imageKeys: { [key: string]: string; } = {};
+  private getImageKeysInObject(data: { [key: string]: any }) {
+    const imageKeys: { [key: string]: string } = {};
     for (const [key, value] of Object.entries(data)) {
       if (/^.*[Ii]mage$/.test(key) && value) {
         imageKeys[key] = value;
@@ -190,14 +190,15 @@ export class ImageService {
   private mapImageToObejct(keys: string[], images: ImageEntity[], imageKeys: IImageKeys): IReslovedUrls {
     return keys.reduce((acc, key) => {
       const image = images.find(image => image.key === imageKeys[key]);
-      if (key == "image") {
-        acc["imageUrl"] = image?.url || null;
-        acc["imageProvider"] = image?.provider || null;
+      if (key === 'image') {
+        acc.imageUrl = image?.url || null;
+        acc.imageProvider = image?.provider || null;
         return acc;
-      } else {
+      }
+      else {
         const propertyName = key.replace(/Image$/, '');
-        acc[propertyName + "ImageUrl"] = image?.url || null;
-        acc[propertyName + "ImageProvider"] = image?.provider || null;
+        acc[`${propertyName}ImageUrl`] = image?.url || null;
+        acc[`${propertyName}ImageProvider`] = image?.provider || null;
         return acc;
       }
     }, {} as IReslovedUrls);

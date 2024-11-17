@@ -1,6 +1,6 @@
-import { Exclude } from "class-transformer";
-import { DeleteDateColumn } from "typeorm";
-import { BaseEntity } from "./base.entity";
+import { Exclude } from 'class-transformer';
+import { DeleteDateColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 export class SoftDeleteEntity extends BaseEntity {
   @Exclude()

@@ -11,13 +11,13 @@ export class ImageResloverInterceptor<T> implements NestInterceptor<T> {
   intercept(_context: ExecutionContext, next: CallHandler) {
     return next.handle().pipe(
       map(async (data) => {
-        if (data && typeof data === "object") {
+        if (data && typeof data === 'object') {
           if (data.data && Array.isArray(data.data)) {
-            data["data"] = await this.imagesService.resolveImageForArray(data["data"]);
+            data.data = await this.imagesService.resolveImageForArray(data.data);
             return data;
           }
-          else if (data["data"] && typeof data["data"] === "object") {
-            data["data"] = await this.imagesService.resolveImageForObject(data["data"]);
+          else if (data.data && typeof data.data === 'object') {
+            data.data = await this.imagesService.resolveImageForObject(data.data);
             return data;
           }
           else if (Array.isArray(data)) {

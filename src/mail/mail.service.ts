@@ -15,7 +15,7 @@ export class MailService {
   async sendTestEmail(email: string) {
     const result = await this.mailerService.sendMail({
       to: email,
-      subject: "Test Email",
+      subject: 'Test Email',
       template: 'test.hbs',
     }) as SentMessageInfo;
 

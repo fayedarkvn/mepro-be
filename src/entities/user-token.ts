@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntityWithBigintId } from "../common/entities/base.entity";
-import { UserEntity } from "./user.entity";
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntityWithBigintId } from '../common/entities/base.entity';
+import { UserEntity } from './user.entity';
 
 export enum TokenTypeEnum {
   EMAIL_VERIFICATION = 'email_verification',

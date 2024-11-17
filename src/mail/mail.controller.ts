@@ -11,8 +11,8 @@ import { MailService } from './mail.service';
 export class MailController {
   constructor(private service: MailService) { }
 
-  @Get("send-test")
-  sendMail(@Query("email") email: string) {
+  @Get('send-test')
+  sendMail(@Query('email') email: string) {
     return this.service.sendTestEmail(email);
   }
 }

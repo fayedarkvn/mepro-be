@@ -1,6 +1,6 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../common/entities/base.entity';
-import { UserEntity } from "./user.entity";
+import { UserEntity } from './user.entity';
 
 export enum AccountProviderEnum {
   GOOGLE = 'google',
