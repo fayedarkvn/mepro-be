@@ -1,54 +1,38 @@
-import js from '@eslint/js';
-import typescriptEslintParser from '@typescript-eslint/parser';
-import checkFile from 'eslint-plugin-check-file';
-import { dirname } from 'path';
-import tseslint from 'typescript-eslint';
-import { fileURLToPath } from 'url';
+import {
+  combine,
+  comments,
+  ignores,
+  imports,
+  javascript,
+  jsdoc,
+  jsonc,
+  markdown,
+  node,
+  stylistic,
+  typescript,
+  unicorn,
+  yaml,
+} from '@antfu/eslint-config';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export default tseslint.config(
-  {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-    ],
-    files: ['**/*.ts'],
-    languageOptions: {
-      parser: typescriptEslintParser,
-      parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: __dirname,
-        sourceType: 'module',
-      },
+export default combine(
+  ignores(),
+  javascript(),
+  comments(),
+  node(),
+  jsdoc(),
+  imports(),
+  unicorn(),
+  typescript({
+    overrides: {
+      'ts/consistent-type-imports': 'off',
     },
-    plugins: {
-      'check-file': checkFile,
-    },
-    rules: {
-      'eol-last': ['error', 'always'],
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'comma-dangle': ['error', 'always-multiline'],
-      'check-file/filename-naming-convention': [
-        'error',
-        {
-          '**/*.{ts,tsx}': 'KEBAB_CASE',
-        },
-        {
-          ignoreMiddleExtensions: true,
-        },
-      ],
-    },
-    ignores: ['node_modules/**/*', 'dist/**/*'],
-  },
-  {
-    files: ['**/*.js'],
-    ignores: ['node_modules/**/*', 'dist/**/*'],
-  },
+  }),
+  stylistic({
+    semi: true,
+    indent: 2,
+    quotes: 'single',
+  }),
+  jsonc(),
+  yaml(),
+  markdown(),
 );
